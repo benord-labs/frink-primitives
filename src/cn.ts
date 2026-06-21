@@ -1,4 +1,11 @@
-/** Tiny class-name joiner (no clsx/tailwind-merge dep). Falsy parts are dropped. */
-export function cn(...parts: Array<string | false | null | undefined>): string {
-	return parts.filter(Boolean).join(" ");
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+/**
+ * Class-name joiner with Tailwind conflict resolution. Later utilities win, so a
+ * consumer `className` deterministically overrides a primitive's baked-in utility
+ * (e.g. `bg-warning` beats the cva root's `bg-surface`).
+ */
+export function cn(...parts: ClassValue[]): string {
+	return twMerge(clsx(parts));
 }
