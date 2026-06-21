@@ -1,6 +1,6 @@
 {
   "name": "@benord-labs/frink-primitives",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Frink shared UI primitives + design tokens (Tailwind v4).",
   "type": "module",
   "license": "UNLICENSED",
@@ -28,6 +28,7 @@
     "./styles": "./styles/index.css",
     "./styles/theme.css": "./styles/theme.css",
     "./styles/components.css": "./styles/components.css",
+    "./eslint": "./eslint-rules/index.mjs",
     "./eslint/no-raw-color": "./eslint-rules/no-raw-color.mjs"
   },
   "scripts": {
@@ -40,7 +41,17 @@
     "react-dom": ">=19",
     "tailwindcss": ">=4",
     "lucide-react": ">=0.5",
-    "class-variance-authority": ">=0.7"
+    "class-variance-authority": ">=0.7",
+    "eslint": ">=9",
+    "@typescript-eslint/parser": ">=8"
+  },
+  "peerDependenciesMeta": {
+    "eslint": {
+      "optional": true
+    },
+    "@typescript-eslint/parser": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.0",
