@@ -36,7 +36,7 @@
 		"test": "bun test",
 		"lint": "biome check .",
 		"format": "biome check --write .",
-		"prepare": "husky",
+		"prepare": "husky || true",
 		"guard:freeze": "guard-fanout freeze && guard-size freeze",
 		"lint:structure": "eslint src"
 	},
