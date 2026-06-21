@@ -18,6 +18,7 @@ export const buttonVariants = cva(
 				destructive: "glow-rim-danger text-danger-200 hover:bg-danger/10",
 			},
 			size: {
+				xs: "h-8 px-3 text-xs",
 				sm: "h-9 px-4 text-[13px]",
 				md: "h-10 px-5 text-sm",
 				lg: "h-11 px-7 text-[15px]",
