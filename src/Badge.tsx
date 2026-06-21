@@ -11,10 +11,20 @@ const badge = cva(
 				online: "border-rim text-ink",
 				running: "border-field-border text-ink",
 				success: "border-secondary/40 text-secondary-200",
+				warning: "border-warning/40 text-warning-200",
 				error: "border-danger/40 text-danger",
 			},
+			// Geometry/chrome, orthogonal to colour. `tag`/`count` drop the border and
+			// leading dot so a consumer `className` (now tailwind-merged) can fully
+			// re-colour and re-size them — brand fills, accent tints, square digits.
+			shape: {
+				pill: "",
+				tag: "rounded-md border-0 px-1.5 py-0",
+				count:
+					"min-w-4 justify-center rounded-full border-0 px-1 py-0 tabular-nums",
+			},
 		},
-		defaultVariants: { variant: "default" },
+		defaultVariants: { variant: "default", shape: "pill" },
 	},
 );
 
@@ -30,10 +40,12 @@ const DOT: Record<
 	online: "bg-online",
 	running: "bg-ink",
 	success: "bg-secondary",
+	warning: "bg-warning",
 	error: "bg-danger",
 };
 
 export type BadgeVariant = NonNullable<VariantProps<typeof badge>["variant"]>;
+export type BadgeShape = NonNullable<VariantProps<typeof badge>["shape"]>;
 
 export interface BadgeProps
 	extends Omit<HTMLAttributes<HTMLElement>, "children">,
@@ -53,6 +65,7 @@ export interface BadgeProps
 
 export function Badge({
 	variant = "default",
+	shape = "pill",
 	noDot = false,
 	pulse = false,
 	href,
@@ -63,13 +76,15 @@ export function Badge({
 }: BadgeProps) {
 	const isInteractive = interactive ?? href != null;
 	const classes = cn(
-		badge({ variant }),
+		badge({ variant, shape }),
 		isInteractive && INTERACTIVE,
 		className,
 	);
 	const dotColor = DOT[variant ?? "default"];
+	// Only the pill shape carries a leading status dot; tag/count are dotless.
+	const showDot = !noDot && shape === "pill";
 
-	const dot = noDot ? null : pulse ? (
+	const dot = !showDot ? null : pulse ? (
 		<span className="relative flex size-1.5" aria-hidden>
 			<span
 				className={cn(
