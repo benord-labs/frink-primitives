@@ -8,7 +8,7 @@ import {
 import { cn } from "./cn";
 
 export const buttonVariants = cva(
-	"btn inline-flex select-none items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium leading-none tracking-[0.01em] outline-none transition-[filter,box-shadow,background-color,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
+	"btn inline-flex select-none items-center justify-center whitespace-nowrap rounded-full font-medium leading-none tracking-[0.01em] outline-none transition-[filter,box-shadow,background-color,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
 	{
 		variants: {
 			variant: {
@@ -18,10 +18,11 @@ export const buttonVariants = cva(
 				destructive: "glow-rim-danger text-danger-200 hover:bg-danger/10",
 			},
 			size: {
-				xs: "h-8 px-3 text-xs",
-				sm: "h-9 px-4 text-[13px]",
-				md: "h-10 px-5 text-sm",
-				lg: "h-11 px-7 text-[15px]",
+				xs: "h-6 gap-1.5 px-2.5 text-xs",
+				sm: "h-7 gap-1.5 px-3 text-[13px]",
+				md: "h-8 gap-2 px-4 text-sm",
+				lg: "h-10 gap-2 px-6 text-[15px]",
+				xl: "h-12 gap-2.5 px-8 text-base",
 			},
 			iconOnly: { true: "aspect-square px-0", false: "" },
 		},
