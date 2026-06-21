@@ -1,3 +1,6 @@
 node_modules
 *.log
 .DS_Store
+.fallow/
+.devkit/
+.search-code/

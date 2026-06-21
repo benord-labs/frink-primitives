@@ -7,51 +7,56 @@
    objectBoundingBox SVG clipPath (see <DiagonalCutDefs/>), so one path fits any
    element size. Apply to the MEDIA inside a rounded, hairline-bordered <Tile>. */
 .clip-diagonal-cut {
-  clip-path: url(#frink-diagonal-cut);
+	clip-path: url(#frink-diagonal-cut);
 }
 
 /* Tile signature rim — machined-metal gradient border (light top-right -> dark
    bottom-left) + soft outer glow. Element needs its own border-radius. */
 .tile-rim {
-  position: relative;
-  box-shadow: 0 0 34px -8px #ffffff14;
+	position: relative;
+	box-shadow: 0 0 34px -8px #ffffff14;
 }
 .tile-rim::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(225deg, var(--muted) 0%, var(--rim) 50%, #2e2e2e 100%);
-  -webkit-mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  mask:
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: 1px;
+	background: linear-gradient(
+		225deg,
+		var(--muted) 0%,
+		var(--rim) 50%,
+		#2e2e2e 100%
+	);
+	-webkit-mask:
+		linear-gradient(#fff 0 0) content-box,
+		linear-gradient(#fff 0 0);
+	mask:
+		linear-gradient(#fff 0 0) content-box,
+		linear-gradient(#fff 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+	pointer-events: none;
 }
 
 /* Fixed-size diagonal corner notch (top-right). Stays a constant corner accent at
    any panel height — unlike the objectBoundingBox .clip-diagonal-cut. */
 .tile-notch {
-  clip-path: polygon(0 0, calc(100% - 92px) 0, 100% 46px, 100% 100%, 0 100%);
+	clip-path: polygon(0 0, calc(100% - 92px) 0, 100% 46px, 100% 100%, 0 100%);
 }
 
 /* ═══════════════ Button interaction — hover/active brightness ═══════════════ */
 .btn {
-  transition:
-    filter 0.14s ease,
-    box-shadow 0.14s ease,
-    background-color 0.14s ease;
+	transition:
+		filter 0.14s ease,
+		box-shadow 0.14s ease,
+		background-color 0.14s ease;
 }
 .btn:hover:not(:disabled) {
-  filter: brightness(1.1);
+	filter: brightness(1.1);
 }
 .btn:active:not(:disabled) {
-  filter: brightness(0.94);
+	filter: brightness(0.94);
 }
 
 /* ── Glow rim — the border IS a conic gradient masked to a 1px ring on the outer
@@ -59,98 +64,98 @@
    `from` angle TRANSITIONS 0 -> 180deg over 3s so it travels round the path.
    --rim-angle is a registered @property so the angle actually interpolates. ──── */
 @property --rim-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
+	syntax: "<angle>";
+	inherits: false;
+	initial-value: 0deg;
 }
 
 .glow-rim {
-  position: relative;
-  background: transparent;
+	position: relative;
+	background: transparent;
 }
 .glow-rim-primary {
-  position: relative;
-  background: linear-gradient(180deg, #bca7ff, #8b6cff);
-  box-shadow:
-    0 8px 24px -6px rgb(139 108 255 / 0.4),
-    inset 0 1px 0 rgb(255 255 255 / 0.18);
+	position: relative;
+	background: linear-gradient(180deg, #bca7ff, #8b6cff);
+	box-shadow:
+		0 8px 24px -6px rgb(139 108 255 / 0.4),
+		inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 .glow-rim-danger {
-  position: relative;
-  background: transparent;
+	position: relative;
+	background: transparent;
 }
 
 /* the rim ring: a 1px band clipped to the outer edge via mask-composite */
 .glow-rim::before,
 .glow-rim-primary::before,
 .glow-rim-danger::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  pointer-events: none;
-  filter: brightness(1);
-  transition:
-    --rim-angle 3s cubic-bezier(0.22, 1, 0.36, 1),
-    filter 0.5s ease;
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	padding: 1px;
+	-webkit-mask:
+		linear-gradient(#000 0 0) content-box,
+		linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask:
+		linear-gradient(#000 0 0) content-box,
+		linear-gradient(#000 0 0);
+	mask-composite: exclude;
+	pointer-events: none;
+	filter: brightness(1);
+	transition:
+		--rim-angle 3s cubic-bezier(0.22, 1, 0.36, 1),
+		filter 0.5s ease;
 }
 
 /* bright region top-right (~60deg from top), dark bottom-left (~240deg) */
 .glow-rim::before {
-  background: conic-gradient(
-    from var(--rim-angle),
-    var(--rim) 0deg,
-    var(--muted) 60deg,
-    var(--rim) 150deg,
-    #2e2e2e 240deg,
-    var(--rim) 330deg,
-    var(--rim) 360deg
-  );
+	background: conic-gradient(
+		from var(--rim-angle),
+		var(--rim) 0deg,
+		var(--muted) 60deg,
+		var(--rim) 150deg,
+		#2e2e2e 240deg,
+		var(--rim) 330deg,
+		var(--rim) 360deg
+	);
 }
 .glow-rim-primary::before {
-  background: conic-gradient(
-    from var(--rim-angle),
-    #7a7a80 0deg,
-    #e6e6ea 60deg,
-    #7a7a80 150deg,
-    #2e2e2e 240deg,
-    #7a7a80 330deg,
-    #7a7a80 360deg
-  );
+	background: conic-gradient(
+		from var(--rim-angle),
+		#7a7a80 0deg,
+		#e6e6ea 60deg,
+		#7a7a80 150deg,
+		#2e2e2e 240deg,
+		#7a7a80 330deg,
+		#7a7a80 360deg
+	);
 }
 .glow-rim-danger::before {
-  background: conic-gradient(
-    from var(--rim-angle),
-    #a44a5e 0deg,
-    #ffb3c9 60deg,
-    #a44a5e 150deg,
-    #3a1e26 240deg,
-    #a44a5e 330deg,
-    #a44a5e 360deg
-  );
+	background: conic-gradient(
+		from var(--rim-angle),
+		#a44a5e 0deg,
+		#ffb3c9 60deg,
+		#a44a5e 150deg,
+		#3a1e26 240deg,
+		#a44a5e 330deg,
+		#a44a5e 360deg
+	);
 }
 
 /* hover: travel the bright region 180deg round the ring (top-right -> bottom-left) */
 .glow-rim:hover::before,
 .glow-rim-primary:hover::before,
 .glow-rim-danger:hover::before {
-  --rim-angle: 180deg;
-  filter: brightness(1.85);
+	--rim-angle: 180deg;
+	filter: brightness(1.85);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glow-rim::before,
-  .glow-rim-primary::before,
-  .glow-rim-danger::before {
-    transition: none;
-  }
+	.glow-rim::before,
+	.glow-rim-primary::before,
+	.glow-rim-danger::before {
+		transition: none;
+	}
 }

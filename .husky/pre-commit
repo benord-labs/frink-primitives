@@ -1,0 +1,70 @@
+#!/bin/sh
+# devkit generic pre-commit hook (POSIX sh). Runs the selected gate-engine set on every
+# commit. The block between the two `# devkit-guards` markers is devkit-owned and is the
+# only region init / removal touches — everything outside it is the consumer's own hook.
+
+# GUI git clients launch with a minimal PATH that omits user bin dirs, so `bun`/`bunx`
+# can go missing → the hook fails. Prepend the standard user install locations.
+for dir in "$HOME/.bun/bin" "$HOME/.local/bin"; do
+    [ -d "$dir" ] && case ":$PATH:" in *":$dir:"*) ;; *) PATH="$dir:$PATH" ;; esac
+done
+export PATH
+
+# >>> devkit-guards >>>
+# devkit:biome-format
+# Format staged files with biome, then re-stage exactly those (scoped — never a blanket
+# `git add -u`, which would sweep unrelated working-tree changes into the commit). Only
+# re-add files with NO unstaged edits, so partially-staged files commit exactly as staged.
+STAGED_FMT=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(tsx?|jsx?|css|json|jsonc|mjs)$' || true)
+if [ -n "$STAGED_FMT" ]; then
+    UNSTAGED_FMT_FILE=$(mktemp)
+    git diff --name-only | sort -u >"$UNSTAGED_FMT_FILE"
+    FMT_SAFE=$(printf '%s\n' "$STAGED_FMT" | grep -Fxvf "$UNSTAGED_FMT_FILE" || true)
+    rm -f "$UNSTAGED_FMT_FILE"
+    if [ -n "$FMT_SAFE" ]; then
+        echo "🎨 Formatting staged files..."
+        echo "$FMT_SAFE" | xargs bunx biome format --write 2>/dev/null || true
+        echo "$FMT_SAFE" | xargs git add
+    fi
+fi
+# /devkit:biome-format
+
+# Structure lint (folder-structure + max-lines). OFF for this stack — uncomment after a
+# structure preset is wired.
+bunx eslint src || exit 1
+
+# devkit:guard-size
+echo "📏 Size-debt ratchet..."
+src=0
+bunx guard-size gate || src=$?
+if [ "$src" -eq 1 ]; then
+    echo "   Re-freeze after a deliberate audit: bunx guard-size freeze"
+    exit 1
+fi
+# src 0 = ok / shrank, src 2 = baseline missing (fail-open) → continue.
+# /devkit:guard-size
+
+# devkit:guard-dup
+echo "🔁 Duplication gate (semantic)..."
+drc=0
+bunx guard-dup scan --new --changed --gate || drc=$?
+if [ "$drc" -eq 1 ]; then
+    echo "   New duplication. Refactor it, or run the approval command the gate printed above."
+    exit 1
+fi
+# drc 0 = clean, drc 2 = could-not-run (fail-open) → continue.
+# /devkit:guard-dup
+
+# devkit:guard-clone
+echo "🔁 Clone gate (verbatim)..."
+crc=0
+bunx guard-clone scan --changed --gate || crc=$?
+if [ "$crc" -eq 1 ]; then
+    echo "   New verbatim clone. Refactor it, or run the approval command the gate printed above."
+    exit 1
+fi
+# crc 0 = clean, crc 2 = could-not-run (fail-open) → continue.
+# /devkit:guard-clone
+# <<< devkit-guards <<<
+
+exit 0
