@@ -1,4 +1,5 @@
-import { describe, expect, test } from "bun:test";
+import assert from "node:assert/strict";
+import { describe, test } from "node:test";
 import { cn } from "./cn";
 
 describe("cn", () => {
@@ -8,19 +9,19 @@ describe("cn", () => {
 			"bg-warning rounded-md text-[10px]",
 		);
 		// consumer overrides win
-		expect(out).toContain("bg-warning");
-		expect(out).toContain("rounded-md");
-		expect(out).toContain("text-[10px]");
+		assert.ok(out.includes("bg-warning"));
+		assert.ok(out.includes("rounded-md"));
+		assert.ok(out.includes("text-[10px]"));
 		// conflicting base utilities are dropped
-		expect(out).not.toContain("bg-surface");
-		expect(out).not.toContain("rounded-full");
-		expect(out).not.toContain("text-xs");
+		assert.ok(!out.includes("bg-surface"));
+		assert.ok(!out.includes("rounded-full"));
+		assert.ok(!out.includes("text-xs"));
 		// non-conflicting base utilities are kept
-		expect(out).toContain("border");
-		expect(out).toContain("px-2.5");
+		assert.ok(out.includes("border"));
+		assert.ok(out.includes("px-2.5"));
 	});
 
 	test("drops falsy parts and resolves conditional objects", () => {
-		expect(cn("a", false, null, undefined, { b: true, c: false })).toBe("a b");
+		assert.equal(cn("a", false, null, undefined, { b: true, c: false }), "a b");
 	});
 });
