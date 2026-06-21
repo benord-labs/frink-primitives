@@ -1,0 +1,50 @@
+{
+  "name": "@benord-labs/frink-primitives",
+  "version": "0.1.0",
+  "description": "Frink shared UI primitives + design tokens (Tailwind v4).",
+  "type": "module",
+  "license": "UNLICENSED",
+  "sideEffects": [
+    "*.css"
+  ],
+  "files": [
+    "src",
+    "styles",
+    "eslint-rules",
+    "designs"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
+    "./styles": "./styles/index.css",
+    "./styles/theme.css": "./styles/theme.css",
+    "./styles/components.css": "./styles/components.css",
+    "./eslint/no-raw-color": "./eslint-rules/no-raw-color.mjs"
+  },
+  "scripts": {
+    "ts:check": "tsc --noEmit",
+    "test": "bun test",
+    "lint": "biome check ."
+  },
+  "peerDependencies": {
+    "react": ">=19",
+    "react-dom": ">=19",
+    "tailwindcss": ">=4",
+    "lucide-react": ">=0.5",
+    "class-variance-authority": ">=0.7"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/parser": "^8.0.0",
+    "class-variance-authority": "^0.7.1",
+    "eslint": "^9.39.0",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "typescript": "^5.9.3"
+  }
+}

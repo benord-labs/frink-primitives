@@ -1,0 +1,200 @@
+/* @benord-labs/frink-primitives — design tokens (Tailwind v4).
+   Consumer MUST `@import "@benord-labs/frink-primitives/styles"` AFTER
+   `@import "tailwindcss"` so the @theme block registers against the engine. */
+
+:root {
+  --bg: #050505;
+  --border: #2d2d2d;
+  --border-subtle: #232323;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-border: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+  /* role tokens for the utazon-matched UI kit */
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
+  --color-ring: var(--ring);
+  --color-field: var(--field);
+  --color-field-border: var(--field-border);
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+  --color-primary-950: var(--primary-950);
+  --color-secondary-50: var(--secondary-50);
+  --color-secondary-100: var(--secondary-100);
+  --color-secondary-200: var(--secondary-200);
+  --color-secondary-300: var(--secondary-300);
+  --color-secondary-400: var(--secondary-400);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-600: var(--secondary-600);
+  --color-secondary-700: var(--secondary-700);
+  --color-secondary-800: var(--secondary-800);
+  --color-secondary-900: var(--secondary-900);
+  --color-secondary-950: var(--secondary-950);
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+  --color-neutral-950: var(--neutral-950);
+  --color-danger-50: var(--danger-50);
+  --color-danger-100: var(--danger-100);
+  --color-danger-200: var(--danger-200);
+  --color-danger-300: var(--danger-300);
+  --color-danger-400: var(--danger-400);
+  --color-danger-500: var(--danger-500);
+  --color-danger-600: var(--danger-600);
+  --color-danger-700: var(--danger-700);
+  --color-danger-800: var(--danger-800);
+  --color-danger-900: var(--danger-900);
+  --color-danger-950: var(--danger-950);
+  --color-warning-50: var(--warning-50);
+  --color-warning-100: var(--warning-100);
+  --color-warning-200: var(--warning-200);
+  --color-warning-300: var(--warning-300);
+  --color-warning-400: var(--warning-400);
+  --color-warning-500: var(--warning-500);
+  --color-warning-600: var(--warning-600);
+  --color-warning-700: var(--warning-700);
+  --color-warning-800: var(--warning-800);
+  --color-warning-900: var(--warning-900);
+  --color-warning-950: var(--warning-950);
+  --color-info-50: var(--info-50);
+  --color-info-100: var(--info-100);
+  --color-info-200: var(--info-200);
+  --color-info-300: var(--info-300);
+  --color-info-400: var(--info-400);
+  --color-info-500: var(--info-500);
+  --color-info-600: var(--info-600);
+  --color-info-700: var(--info-700);
+  --color-info-800: var(--info-800);
+  --color-info-900: var(--info-900);
+  --color-info-950: var(--info-950);
+  --color-secondary: var(--secondary);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-raised: var(--raised);
+  --color-rim: var(--rim);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-dim: var(--dim);
+  --color-online: var(--online);
+}
+
+/* ═══════════════ Brand & role token values ═══════════════ */
+:root {
+  /* hairline borders on near-black */
+  --hairline: #ffffff1a;
+  --hairline-strong: #ffffff2e;
+  /* role tokens — the utazon-matched UI kit (primary = frink violet) */
+  --primary: var(--primary-500);
+  --primary-hover: var(--primary-400);
+  --primary-active: var(--primary-600);
+  --primary-fg: #0b0a14; /* near-black text on the violet fill */
+  --ring: #a78bfa;
+  --field: #0d0d0d;
+  --field-border: #2a2a2e;
+  /* ── numeric ramps (Tailwind-style; 500 = base) ── */
+  --primary-50: #fbf5ff;
+  --primary-100: #f3e9ff;
+  --primary-200: #e4d4ff;
+  --primary-300: #d1bdff;
+  --primary-400: #bca3ff;
+  --primary-500: #a78bfa;
+  --primary-600: #9275e2;
+  --primary-700: #7a5ec3;
+  --primary-800: #634aa1;
+  --primary-900: #4e3b81;
+  --primary-950: #3e2e67;
+  --secondary-50: #e4ffed;
+  --secondary-100: #d8ffe7;
+  --secondary-200: #c7ffde;
+  --secondary-300: #b7ffd6;
+  --secondary-400: #9cffc1;
+  --secondary-500: #7df0a8;
+  --secondary-600: #65d992;
+  --secondary-700: #50bd7c;
+  --secondary-800: #42a269;
+  --secondary-900: #3c895a;
+  --secondary-950: #38744f;
+  --neutral-50: #fafafa;
+  --neutral-100: #eeeeee;
+  --neutral-200: #d7d7d7;
+  --neutral-300: #b7b7b7;
+  --neutral-400: #929292;
+  --neutral-500: #717171;
+  --neutral-600: #585858;
+  --neutral-700: #404040;
+  --neutral-800: #292929;
+  --neutral-900: #161616;
+  --neutral-950: #090909;
+  --danger-50: #fff1f6;
+  --danger-100: #ffecf4;
+  --danger-200: #ffe5f1;
+  --danger-300: #ffcfdf;
+  --danger-400: #ffb4c7;
+  --danger-500: #ff9bb0;
+  --danger-600: #e7859a;
+  --danger-700: #c96f83;
+  --danger-800: #a95b6d;
+  --danger-900: #8c4c5a;
+  --danger-950: #74404b;
+  --warning-50: #fff6d8;
+  --warning-100: #fff4c5;
+  --warning-200: #ffefab;
+  --warning-300: #ffd87f;
+  --warning-400: #ffbe52;
+  --warning-500: #f5a623;
+  --warning-600: #dd9000;
+  --warning-700: #c07800;
+  --warning-800: #a16300;
+  --warning-900: #855200;
+  --warning-950: #6d4400;
+  --info-50: #e0ffff;
+  --info-100: #d2ffff;
+  --info-200: #beffff;
+  --info-300: #aaffff;
+  --info-400: #89feff;
+  --info-500: #67e8f9;
+  --info-600: #4cd1e2;
+  --info-700: #36b6c6;
+  --info-800: #2b9ba9;
+  --info-900: #2b848f;
+  --info-950: #2b7079;
+  /* role aliases -> ramp steps */
+  --secondary: var(--secondary-500);
+  --success: var(--secondary-500);
+  --danger: var(--danger-500);
+  --warning: var(--warning-500);
+  --info: var(--info-500);
+  --surface: #0a0a0a;
+  --elevated: #141414;
+  --raised: #1a1a1a;
+  --rim: #565656;
+  /* text scale */
+  --ink: #e8e8e8;
+  --muted: #9a9a9a;
+  --dim: #4a4a4a;
+  /* status */
+  --online: #86efac;
+}
