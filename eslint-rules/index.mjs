@@ -19,7 +19,7 @@ export const frinkColorConfig = {
   },
   linterOptions: { reportUnusedDisableDirectives: 'off' },
   plugins: { frink: frinkEslintPlugin },
-  rules: { 'frink/no-raw-color': 'error', 'frink/no-raw-style-color': 'warn' },
+  rules: { 'frink/no-raw-color': 'error', 'frink/no-raw-style-color': 'error' },
 };
 
 export { noRawColor, noRawStyleColor };
