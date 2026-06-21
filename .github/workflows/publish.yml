@@ -1,0 +1,25 @@
+name: Publish to GitHub Packages
+
+# Publishes @benord-labs/frink-primitives whenever a vX.Y.Z tag is pushed.
+# Uses the Actions-provided GITHUB_TOKEN (packages:write for this org) — no PAT to manage.
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://npm.pkg.github.com
+      # Raw-source package (no build) — publish the files declared in package.json "files".
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
