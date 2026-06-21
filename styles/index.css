@@ -1,0 +1,7 @@
+/* @benord-labs/frink-primitives — single style entry.
+   Consumer: `@import "tailwindcss"; @import "@benord-labs/frink-primitives/styles";`
+   The @source below lets the consumer's Tailwind v4 discover the primitives'
+   className strings without the consumer knowing the package's internal layout. */
+@import "./theme.css";
+@import "./components.css";
+@source "../src";
