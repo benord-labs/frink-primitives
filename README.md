@@ -17,16 +17,22 @@ the marketing site and (later) the internal app.
   tokens, no raw hex / Tailwind palette classes).
 - **`designs/frink-primitives.pen`** — the Pencil design source of truth. Edit it here.
 
-## Install
+## Install — GitHub Packages (private npm registry)
 
-Dependency in the consuming app's `package.json`:
+Token-based, so it works the same locally, across machines, and on Vercel/CI — no
+SSH keys or git-protocol auth.
 
-```jsonc
-// during active development (local link, fast iteration):
-"@benord-labs/frink-primitives": "file:../frink-primitives"
-// once stable / when a second consumer adopts (versioned):
-"@benord-labs/frink-primitives": "git+ssh://git@github.com/benord-labs/frink-primitives.git#v0.1.0"
-```
+1. Consumer `.npmrc`:
+   ```
+   @benord-labs:registry=https://npm.pkg.github.com
+   //npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}
+   ```
+2. Consumer `package.json`: `"@benord-labs/frink-primitives": "^0.1.0"`.
+3. Set `NODE_AUTH_TOKEN` to a GitHub token with **read:packages** (local: `export …`;
+   Vercel/CI: a build env var). Then `bun install`.
+
+**Publishing** is automated: push a `vX.Y.Z` tag → the `publish.yml` Action publishes
+to GitHub Packages using the Actions `GITHUB_TOKEN` (no PAT needed).
 
 Peers the consumer must provide: `react >=19`, `react-dom >=19`, `tailwindcss >=4`,
 `lucide-react`, `class-variance-authority`.
