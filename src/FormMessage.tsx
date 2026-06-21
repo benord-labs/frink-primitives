@@ -1,25 +1,29 @@
-import type { HTMLAttributes } from 'react';
-import { cn } from './cn';
+import type { HTMLAttributes } from "react";
+import { cn } from "./cn";
 
-export type FormMessageVariant = 'error' | 'success' | 'info';
+export type FormMessageVariant = "error" | "success" | "info";
 
 const TONE: Record<FormMessageVariant, string> = {
-  error: 'text-danger',
-  success: 'text-secondary-200',
-  info: 'text-muted',
+	error: "text-danger",
+	success: "text-secondary-200",
+	info: "text-muted",
 };
 
 export interface FormMessageProps extends HTMLAttributes<HTMLParagraphElement> {
-  variant?: FormMessageVariant;
+	variant?: FormMessageVariant;
 }
 
 /** Inline validation / status message for forms and fields. */
-export function FormMessage({ variant = 'error', className, ...props }: FormMessageProps) {
-  return (
-    <p
-      role={variant === 'error' ? 'alert' : 'status'}
-      className={cn('text-xs leading-relaxed', TONE[variant], className)}
-      {...props}
-    />
-  );
+export function FormMessage({
+	variant = "error",
+	className,
+	...props
+}: FormMessageProps) {
+	return (
+		<p
+			role={variant === "error" ? "alert" : "status"}
+			className={cn("text-xs leading-relaxed", TONE[variant], className)}
+			{...props}
+		/>
+	);
 }
