@@ -1,6 +1,6 @@
 {
 	"name": "@benord-labs/frink-primitives",
-	"version": "0.3.0",
+	"version": "0.4.1",
 	"description": "Frink shared UI primitives + design tokens (Tailwind v4).",
 	"type": "module",
 	"license": "UNLICENSED",
@@ -72,7 +72,7 @@
 		"react": "^19.2.3",
 		"react-dom": "^19.2.3",
 		"typescript": "^5.9.3",
-		"@norvalbv/devkit": "git+ssh://git@github.com/norvalbv/devkit.git#v0.15.0",
+		"@norvalbv/devkit": "git+ssh://git@github.com/norvalbv/devkit.git#v0.16.0",
 		"husky": "^9.1.7",
 		"jscpd": "^4.2.4",
 		"eslint-plugin-project-structure": "^3.0.0"

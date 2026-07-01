@@ -64,9 +64,11 @@ export function Tile({
 			<div className="clip-diagonal-cut absolute inset-0">
 				{media ?? <div className="h-full w-full bg-elevated" />}
 			</div>
-			{/* legibility scrim for the overlaid metadata */}
+			{/* legibility scrim for the overlaid metadata — flips per theme so the
+			    (theme-coloured) title/meta stay readable: white wash under dark ink in
+			    light, black wash under light ink in dark. */}
 			<div
-				className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/75 to-transparent"
+				className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white/75 to-transparent dark:from-black/75"
 				aria-hidden
 			/>
 			{year != null && (
