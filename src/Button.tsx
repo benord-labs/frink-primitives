@@ -109,12 +109,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 		return (
 			<button
 				ref={ref}
-				// Default to a non-submitting button (a caller's `type` in props still wins),
-				// so a Button dropped inside a <form> never submits it by accident.
+				{...props}
+				// Default to a non-submitting button. Placing this after the spread
+				// ensures the explicit default wins over any `undefined` from props.
 				type="button"
 				disabled={disabled || loading}
 				className={classes}
-				{...props}
 			>
 				{inner}
 			</button>
