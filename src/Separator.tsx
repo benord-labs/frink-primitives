@@ -16,7 +16,10 @@ export function Separator({
 	if (label) {
 		return (
 			<div
-				className={cn("flex items-center gap-3 text-xs text-muted", className)}
+				className={cn(
+					"flex items-center gap-3 text-xs text-muted-fg",
+					className,
+				)}
 				{...props}
 			>
 				<span className="h-px flex-1 bg-hairline" aria-hidden />

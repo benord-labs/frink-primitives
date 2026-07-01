@@ -106,6 +106,7 @@
 	--color-rim: var(--rim);
 	--color-ink: var(--ink);
 	--color-muted: var(--muted);
+	--color-muted-fg: var(--muted-fg);
 	--color-dim: var(--dim);
 	--color-online: var(--online);
 }
@@ -213,6 +214,10 @@
 	--rim: #cfcfd4;
 	/* text scale */
 	--ink: #18181b;
+	/* --muted-fg is muted TEXT; --muted is a muted SURFACE (bg-muted). Kept separate
+	   so consumers that redefine --muted as a surface (shadcn convention) don't turn
+	   `text-muted-fg` into invisible same-theme-surface text. */
+	--muted-fg: #57575e;
 	--muted: #57575e;
 	--dim: #a1a1aa;
 	/* status */
@@ -256,6 +261,7 @@
 	--raised: #1a1a1a;
 	--rim: #565656;
 	--ink: #e8e8e8;
+	--muted-fg: #9a9a9a;
 	--muted: #9a9a9a;
 	--dim: #4a4a4a;
 	--online: #86efac;
