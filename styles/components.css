@@ -14,7 +14,8 @@
    bottom-left) + soft outer glow. Element needs its own border-radius. */
 .tile-rim {
 	position: relative;
-	box-shadow: 0 0 34px -8px #ffffff14;
+	/* --tile-glow flips per theme (theme.css): black-alpha on light, white on dark. */
+	box-shadow: 0 0 34px -8px var(--tile-glow, #ffffff14);
 }
 .tile-rim::before {
 	content: "";
