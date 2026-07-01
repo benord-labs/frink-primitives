@@ -31,17 +31,23 @@ fi
 
 # Structure lint (folder-structure + max-lines). OFF for this stack — uncomment after a
 # structure preset is wired.
-bunx eslint src || exit 1
+bunx guard-structure || exit 1
 
 # devkit:guard-size
 echo "📏 Size-debt ratchet..."
+# set -e-safe: husky runs hooks under `sh -e`, so a bare `bunx … gate` returning its
+# fail-open code (2) would abort the whole hook before this check. `|| src=$?` neutralises
+# set -e (the call is now a tested command) AND captures the code.
 src=0
 bunx guard-size gate || src=$?
 if [ "$src" -eq 1 ]; then
     echo "   Re-freeze after a deliberate audit: bunx guard-size freeze"
     exit 1
+elif [ "$src" -ne 0 ] && [ "$src" -ne 2 ]; then
+    echo "   guard-size: unexpected exit $src — blocking the commit."
+    exit 1
 fi
-# src 0 = ok / shrank, src 2 = baseline missing (fail-open) → continue.
+# src 0 = ok / shrank, src 2 = baseline missing (fail-open) → continue; any other code blocks.
 # /devkit:guard-size
 
 # devkit:guard-dup
@@ -51,8 +57,11 @@ bunx guard-dup scan --new --changed --gate || drc=$?
 if [ "$drc" -eq 1 ]; then
     echo "   New duplication. Refactor it, or run the approval command the gate printed above."
     exit 1
+elif [ "$drc" -ne 0 ] && [ "$drc" -ne 2 ]; then
+    echo "   guard-dup: unexpected exit $drc — blocking the commit."
+    exit 1
 fi
-# drc 0 = clean, drc 2 = could-not-run (fail-open) → continue.
+# drc 0 = clean, drc 2 = could-not-run (fail-open) → continue; any other code blocks.
 # /devkit:guard-dup
 
 # devkit:guard-clone
@@ -62,8 +71,11 @@ bunx guard-clone scan --changed --gate || crc=$?
 if [ "$crc" -eq 1 ]; then
     echo "   New verbatim clone. Refactor it, or run the approval command the gate printed above."
     exit 1
+elif [ "$crc" -ne 0 ] && [ "$crc" -ne 2 ]; then
+    echo "   guard-clone: unexpected exit $crc — blocking the commit."
+    exit 1
 fi
-# crc 0 = clean, crc 2 = could-not-run (fail-open) → continue.
+# crc 0 = clean, crc 2 = could-not-run (fail-open) → continue; any other code blocks.
 # /devkit:guard-clone
 # <<< devkit-guards <<<
 
