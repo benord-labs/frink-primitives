@@ -32,6 +32,17 @@ describe("Button", () => {
 		assert.match(renderToStaticMarkup(<Button href="/go">Hi</Button>), /^<a /);
 	});
 
+	test('defaults to type="button" so a Button in a form never submits by accident; a caller type wins', () => {
+		assert.ok(
+			renderToStaticMarkup(<Button>Hi</Button>).includes('type="button"'),
+		);
+		assert.ok(
+			renderToStaticMarkup(<Button type="submit">Go</Button>).includes(
+				'type="submit"',
+			),
+		);
+	});
+
 	test("link variant is a text link (underline), not a filled pill", () => {
 		const cls = buttonVariants({ variant: "link" });
 		assert.ok(cls.includes("underline-offset-4"));
