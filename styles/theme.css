@@ -132,6 +132,10 @@
 	--primary-hover: var(--primary-700);
 	--primary-active: var(--primary-800);
 	--primary-fg: #0b0a14; /* near-black text on the violet fill (theme-independent) */
+	/* liquid-metal glow fill stops. Theme-independent defaults = the brand violet;
+	   a themed consumer overrides these to track its active theme's primary. */
+	--glow-primary-from: #bca7ff;
+	--glow-primary-to: #8b6cff;
 	--ring: var(--primary-700);
 	--field: #ffffff;
 	--field-border: #d4d4d8;
