@@ -14,7 +14,7 @@
  *   cleanup               Remove checklist file
  */
 
-import { execSync } from "node:child_process";
+import { execFileSync, execSync } from "node:child_process";
 import {
 	existsSync,
 	mkdirSync,
@@ -28,10 +28,49 @@ const CHECKLIST_PATH = ".claude/.pre-commit-review.json";
 
 const log = console.log;
 
+const isStringArray = (v) =>
+	Array.isArray(v) && v.every((x) => typeof x === "string" && x.length > 0);
+
+// First-level source roots to review — from guard.config.json (NOT hardcoded), so the checklist
+// scopes to ANY repo's layout. No/unreadable config, a non-object config (e.g. a literal `null`), or
+// an absent scanRoots → all staged files (the gate never silently no-ops). A PRESENT but invalid
+// scanRoots (not an array of non-empty strings) warns loudly and falls back to scan-all, rather than
+// letting a bad entry crash the git call into an empty result that would wave the commit through.
+// Reason: a config-shape validator — parse guard + non-object guard + absent/invalid branches, each
+// trivial and individually covered (cli/__tests__/checklist-scanroots.test.mjs). High branch COUNT,
+// low real risk; the CRAP estimate is inflated only because fallow can't see coverage for a
+// non-exported function.
+// fallow-ignore-next-line complexity
+function scanRoots() {
+	let c;
+	try {
+		c = JSON.parse(readFileSync("guard.config.json", "utf-8"));
+	} catch {
+		return ["."];
+	}
+	const roots = c && typeof c === "object" ? c.scanRoots : undefined;
+	if (roots === undefined) return ["."];
+	if (!isStringArray(roots)) {
+		console.error(
+			"⚠️  commit-guard: ignoring invalid `scanRoots` in guard.config.json (expected an array of non-empty strings) — scanning all staged files instead.",
+		);
+		return ["."];
+	}
+	return roots; // an empty array is a deliberate "no scoping" → git lists all staged files
+}
+
 function getStagedFiles() {
 	try {
-		const output = execSync(
-			"git diff --cached --name-only --diff-filter=ACM -- src/ vercel-serverless/ socket-server/",
+		const output = execFileSync(
+			"git",
+			[
+				"diff",
+				"--cached",
+				"--name-only",
+				"--diff-filter=ACM",
+				"--",
+				...scanRoots(),
+			],
 			{ encoding: "utf-8" },
 		);
 		return output
@@ -58,7 +97,9 @@ function saveChecklist(data) {
 function init() {
 	const stagedFiles = getStagedFiles();
 	if (stagedFiles.length === 0) {
-		log("⚠️  No staged files in src/, vercel-serverless/, or socket-server/");
+		log(
+			"⚠️  No staged files under the configured scanRoots (guard.config.json)",
+		);
 		process.exit(0);
 	}
 
@@ -148,7 +189,12 @@ function finalize() {
 			stdio: "inherit",
 		});
 	} catch {
-		log("⚠️  Could not run approve script");
+		// approve.sh exits non-zero when OTHER reviewers are still pending — propagate it (don't swallow)
+		// so the commit isn't waved through. The commit-guard marker above stays (commit-guard itself passed).
+		log(
+			"❌ approve.sh reported missing reviewer approvals — run the listed reviewers, then retry.",
+		);
+		process.exit(1);
 	}
 }
 
