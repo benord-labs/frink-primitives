@@ -5,10 +5,9 @@ export type AlertVariant = "info" | "success" | "error" | "warning";
 
 const TONE: Record<AlertVariant, string> = {
 	info: "border-field-border bg-elevated text-ink",
-	success:
-		"border-secondary/30 bg-secondary/5 text-secondary-800 dark:text-secondary-200",
-	error: "border-danger/30 bg-danger/5 text-danger-800 dark:text-danger",
-	warning: "border-warning/30 bg-warning/5 text-warning-800 dark:text-warning",
+	success: "border-secondary/30 bg-secondary/5 text-success-fg",
+	error: "border-danger/30 bg-danger/5 text-danger-fg",
+	warning: "border-warning/30 bg-warning/5 text-warning-fg",
 };
 
 export interface AlertProps extends HTMLAttributes<HTMLDivElement> {

@@ -21,6 +21,19 @@ describe("cn", () => {
 		assert.ok(out.includes("px-2.5"));
 	});
 
+	test("a consumer text override wins over a component's semantic foreground in both themes", () => {
+		// The semantic colour is ONE base utility (text-*-fg flips at the token layer),
+		// so tailwind-merge drops it for the caller's text-ink — and nothing theme-scoped
+		// (a `dark:` utility) survives to beat the override in dark mode.
+		const out = cn(
+			"glow-rim-danger text-danger-fg hover:bg-danger/10",
+			"text-ink",
+		);
+		assert.ok(out.includes("text-ink"));
+		assert.ok(!out.includes("text-danger-fg"));
+		assert.ok(!/\bdark:/.test(out));
+	});
+
 	test("drops falsy parts and resolves conditional objects", () => {
 		assert.equal(cn("a", false, null, undefined, { b: true, c: false }), "a b");
 	});
