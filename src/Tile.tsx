@@ -72,14 +72,14 @@ export function Tile({
 				aria-hidden
 			/>
 			{year != null && (
-				<span className="absolute top-2.5 right-4 font-mono text-xs text-muted">
+				<span className="absolute top-2.5 right-4 font-mono text-xs text-muted-fg">
 					{year}
 				</span>
 			)}
 			<div className="absolute right-4 bottom-3.5 left-4 sm:bottom-4">
 				<h3 className="text-[15px] font-semibold text-ink italic">{title}</h3>
 				{meta && (
-					<p className="mt-1 text-[11px] font-medium tracking-[0.14em] text-muted uppercase">
+					<p className="mt-1 text-[11px] font-medium tracking-[0.14em] text-muted-fg uppercase">
 						{meta}
 					</p>
 				)}

@@ -15,7 +15,7 @@ export const buttonVariants = cva(
 			variant: {
 				primary: "glow-rim-primary text-primary-fg",
 				secondary: "glow-rim text-ink hover:bg-[var(--hover-overlay)]",
-				ghost: "text-muted hover:bg-[var(--hover-overlay)] hover:text-ink",
+				ghost: "text-muted-fg hover:bg-[var(--hover-overlay)] hover:text-ink",
 				destructive: "glow-rim-danger text-danger-fg hover:bg-danger/10",
 				link: "text-primary underline-offset-4 hover:underline",
 			},

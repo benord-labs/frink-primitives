@@ -6,7 +6,7 @@ export type FormMessageVariant = "error" | "success" | "info";
 const TONE: Record<FormMessageVariant, string> = {
 	error: "text-danger-fg",
 	success: "text-success-fg",
-	info: "text-muted",
+	info: "text-muted-fg",
 };
 
 export interface FormMessageProps extends HTMLAttributes<HTMLParagraphElement> {
