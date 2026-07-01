@@ -110,7 +110,7 @@
 /* Class-based dark mode (standard Tailwind v4). Components carry `dark:*` utilities
    for the few colours that can't flip by CSS-var alone — semantic text steps baked
    for dark fills (e.g. text-secondary-200) and white-alpha hover overlays. */
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* ═══════════════ Brand & role token values ═══════════════
    Ramps (50–950) and --primary-fg are theme-independent: defined once here. The
