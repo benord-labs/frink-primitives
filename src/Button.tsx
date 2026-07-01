@@ -13,11 +13,9 @@ export const buttonVariants = cva(
 		variants: {
 			variant: {
 				primary: "glow-rim-primary text-primary-fg",
-				secondary: "glow-rim text-ink hover:bg-black/5 dark:hover:bg-white/5",
-				ghost:
-					"text-muted hover:bg-black/5 hover:text-ink dark:hover:bg-white/5",
-				destructive:
-					"glow-rim-danger text-danger-800 hover:bg-danger/10 dark:text-danger-200",
+				secondary: "glow-rim text-ink hover:bg-[var(--hover-overlay)]",
+				ghost: "text-muted hover:bg-[var(--hover-overlay)] hover:text-ink",
+				destructive: "glow-rim-danger text-danger-fg hover:bg-danger/10",
 			},
 			size: {
 				xs: "h-6 gap-1.5 px-2.5 text-xs",
