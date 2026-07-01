@@ -10,9 +10,10 @@ const badge = cva(
 				default: "border-rim text-ink",
 				online: "border-rim text-ink",
 				running: "border-field-border text-ink",
-				success: "border-secondary/40 text-secondary-200",
-				warning: "border-warning/40 text-warning-200",
-				error: "border-danger/40 text-danger",
+				success:
+					"border-secondary/40 text-secondary-800 dark:text-secondary-200",
+				warning: "border-warning/40 text-warning-800 dark:text-warning-200",
+				error: "border-danger/40 text-danger-800 dark:text-danger",
 			},
 			// Geometry/chrome, orthogonal to colour. `tag`/`count` drop the border and
 			// leading dot so a consumer `className` (now tailwind-merged) can fully

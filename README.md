@@ -76,6 +76,24 @@ Surfaces `bg`/`surface`/`elevated`/`raised`; text `ink`/`muted`/`dim`; borders
 `primary`/`secondary`/`neutral`/`danger`/`warning`/`info` (50–950) + role aliases
 `secondary`/`success`/`danger`/`warning`/`info`; status `online`; form `field`/`ring`.
 
+## Theming (light & dark)
+
+Class-based, following the standard Tailwind v4 convention. The base theme is
+**light**; add `class="dark"` on `<html>` (or any ancestor) for dark.
+
+```ts
+document.documentElement.classList.toggle("dark", isDark);
+```
+
+`theme.css` registers the variant as `@custom-variant dark (&:is(.dark *))`. If your
+app already defines that variant (e.g. via a theme provider), the redefinition is a
+no-op — keep yours. Ramps (`primary`/`secondary`/… 50–950) are theme-independent;
+only surface/text/border/role tokens flip. Components carry `dark:*` utilities for
+the few colours a CSS var can't flip alone (semantic text steps, hover overlays).
+
+**Breaking (from 0.3.x):** the default (no class) theme is now **light** — the prior
+build was dark-only. For the old always-dark behaviour, render under `class="dark"`.
+
 ## frink (internal app) adoption — future
 
 frink is currently Tailwind v3 with a different token vocabulary
