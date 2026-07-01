@@ -76,13 +76,15 @@
 }
 .glow-rim-primary {
 	position: relative;
+	/* Fallbacks = the brand stops, so importing components.css WITHOUT theme.css
+	   (a supported standalone entry) still renders the filled glow. */
 	background: linear-gradient(
 		180deg,
-		var(--glow-primary-from),
-		var(--glow-primary-to)
+		var(--glow-primary-from, #bca7ff),
+		var(--glow-primary-to, #8b6cff)
 	);
 	box-shadow:
-		0 8px 24px -6px rgb(from var(--glow-primary-to) r g b / 0.4),
+		0 8px 24px -6px rgb(from var(--glow-primary-to, #8b6cff) r g b / 0.4),
 		inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 .glow-rim-danger {
