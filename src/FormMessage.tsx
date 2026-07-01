@@ -4,8 +4,8 @@ import { cn } from "./cn";
 export type FormMessageVariant = "error" | "success" | "info";
 
 const TONE: Record<FormMessageVariant, string> = {
-	error: "text-danger",
-	success: "text-secondary-200",
+	error: "text-danger-800 dark:text-danger",
+	success: "text-secondary-800 dark:text-secondary-200",
 	info: "text-muted",
 };
 
