@@ -1,3 +1,4 @@
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Loader2 } from "lucide-react";
 import {
@@ -16,6 +17,7 @@ export const buttonVariants = cva(
 				secondary: "glow-rim text-ink hover:bg-[var(--hover-overlay)]",
 				ghost: "text-muted hover:bg-[var(--hover-overlay)] hover:text-ink",
 				destructive: "glow-rim-danger text-danger-fg hover:bg-danger/10",
+				link: "text-primary underline-offset-4 hover:underline",
 			},
 			size: {
 				xs: "h-6 gap-1.5 px-2.5 text-xs",
@@ -23,6 +25,8 @@ export const buttonVariants = cva(
 				md: "h-8 gap-2 px-4 text-sm",
 				lg: "h-10 gap-2 px-6 text-[15px]",
 				xl: "h-12 gap-2.5 px-8 text-base",
+				auto: "h-auto px-2 py-1.5",
+				icon: "size-5 p-0",
 			},
 			iconOnly: { true: "aspect-square px-0", false: "" },
 		},
@@ -46,6 +50,8 @@ export interface ButtonProps
 	rel?: string;
 	/** Shows a spinner and disables the control. */
 	loading?: boolean;
+	/** Merge styling onto the single child element (Radix Slot) instead of rendering a button. */
+	asChild?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -55,6 +61,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 			size,
 			iconOnly,
 			loading = false,
+			asChild = false,
 			href,
 			target,
 			rel,
@@ -66,6 +73,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 		ref,
 	) {
 		const classes = cn(buttonVariants({ variant, size, iconOnly }), className);
+
+		if (asChild) {
+			// ponytail: loading spinner is non-asChild only (ticket keeps loading on
+			// the button/anchor path). Slot needs one child = the caller's element.
+			return (
+				<Slot ref={ref} className={classes} {...props}>
+					{children}
+				</Slot>
+			);
+		}
+
 		const inner = (
 			<>
 				{loading && <Loader2 className="size-4 animate-spin" aria-hidden />}
