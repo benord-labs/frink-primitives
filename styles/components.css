@@ -53,10 +53,10 @@
 		box-shadow 0.14s ease,
 		background-color 0.14s ease;
 }
-.btn:hover:not(:disabled) {
+.btn:hover:not(:disabled):not([aria-disabled="true"]) {
 	filter: brightness(1.1);
 }
-.btn:active:not(:disabled) {
+.btn:active:not(:disabled):not([aria-disabled="true"]) {
 	filter: brightness(0.94);
 }
 
@@ -149,10 +149,12 @@
 	);
 }
 
-/* hover: travel the bright region 180deg round the ring (top-right -> bottom-left) */
-.glow-rim:hover::before,
-.glow-rim-primary:hover::before,
-.glow-rim-danger:hover::before {
+/* hover: travel the bright region 180deg round the ring (top-right -> bottom-left).
+   Skip when the control is disabled — a disabled button has no pointer-events:none, so
+   it still receives :hover; gate on both :disabled (button) and [aria-disabled] (anchor). */
+.glow-rim:hover:not(:disabled):not([aria-disabled="true"])::before,
+.glow-rim-primary:hover:not(:disabled):not([aria-disabled="true"])::before,
+.glow-rim-danger:hover:not(:disabled):not([aria-disabled="true"])::before {
 	--rim-angle: 180deg;
 	filter: brightness(1.85);
 }
