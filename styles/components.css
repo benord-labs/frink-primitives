@@ -76,9 +76,13 @@
 }
 .glow-rim-primary {
 	position: relative;
-	background: linear-gradient(180deg, #bca7ff, #8b6cff);
+	background: linear-gradient(
+		180deg,
+		var(--glow-primary-from),
+		var(--glow-primary-to)
+	);
 	box-shadow:
-		0 8px 24px -6px rgb(139 108 255 / 0.4),
+		0 8px 24px -6px rgb(from var(--glow-primary-to) r g b / 0.4),
 		inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 .glow-rim-danger {
