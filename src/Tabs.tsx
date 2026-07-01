@@ -53,7 +53,7 @@ export function Tabs({
 							"rounded-full px-3.5 py-1.5 text-[13px] font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
 							on
 								? "bg-primary text-primary-fg shadow-[0_2px_10px_-3px_#8b6cff80]"
-								: "text-muted hover:text-ink",
+								: "text-muted-fg hover:text-ink",
 						)}
 					>
 						{it.label}

@@ -30,7 +30,7 @@ const badge = cva(
 
 // Interactive chips (links/buttons) rest muted and lift to ink on hover.
 const INTERACTIVE =
-	"cursor-pointer text-muted transition-colors hover:border-hairline-strong hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
+	"cursor-pointer text-muted-fg transition-colors hover:border-hairline-strong hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
 
 const DOT: Record<
 	NonNullable<VariantProps<typeof badge>["variant"]>,
