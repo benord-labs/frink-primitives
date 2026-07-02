@@ -41,6 +41,12 @@ describe("Button", () => {
 				'type="submit"',
 			),
 		);
+		// An explicit `undefined` (e.g. a forwarded prop) must not clobber the default.
+		assert.ok(
+			renderToStaticMarkup(<Button type={undefined}>Hi</Button>).includes(
+				'type="button"',
+			),
+		);
 	});
 
 	test("link variant is a text link (underline), not a filled pill", () => {
