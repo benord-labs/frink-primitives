@@ -9,7 +9,7 @@ import {
 import { cn } from "./cn";
 
 export const buttonVariants = cva(
-	"btn inline-flex select-none items-center justify-center whitespace-nowrap rounded-full font-medium leading-none tracking-[0.01em] outline-none transition-[filter,box-shadow,background-color,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
+	"btn inline-flex cursor-pointer select-none items-center justify-center whitespace-nowrap rounded-full font-medium leading-none tracking-[0.01em] outline-none transition-[filter,box-shadow,background-color,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
 	{
 		variants: {
 			variant: {
@@ -66,6 +66,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 			target,
 			rel,
 			disabled,
+			type = "button",
 			className,
 			children,
 			...props
@@ -77,8 +78,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 		if (asChild) {
 			// ponytail: loading spinner is non-asChild only (ticket keeps loading on
 			// the button/anchor path). Slot needs one child = the caller's element.
+			// `type` was destructured out above; merge it back so Slot forwards it onto the
+			// caller's child (a slotted <button> otherwise loses the default). Slot's typing
+			// omits `type`, so pass it through the spread rather than as an explicit prop.
+			const childProps = { type, ...props };
 			return (
-				<Slot ref={ref} className={classes} {...props}>
+				<Slot ref={ref} className={classes} {...childProps}>
 					{children}
 				</Slot>
 			);
@@ -109,9 +114,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 		return (
 			<button
 				ref={ref}
-				// Default to a non-submitting button (a caller's `type` in props still wins),
-				// so a Button dropped inside a <form> never submits it by accident.
-				type="button"
+				// Default to a non-submitting button so a Button in a <form> never submits by
+				// accident. `type` is destructured out of props, so its default wins over an
+				// `undefined` spread value, while an explicit caller type (e.g. "submit") still wins.
+				type={type}
 				disabled={disabled || loading}
 				className={classes}
 				{...props}
