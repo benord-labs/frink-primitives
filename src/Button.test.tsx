@@ -47,6 +47,15 @@ describe("Button", () => {
 				'type="button"',
 			),
 		);
+		// asChild forwards the type onto the slotted child (else a slotted <button> submits).
+		assert.ok(
+			renderToStaticMarkup(
+				<Button asChild>
+					{/* biome-ignore lint/a11y/useButtonType: intentionally type-less to prove Button forwards the default */}
+					<button>X</button>
+				</Button>,
+			).includes('type="button"'),
+		);
 	});
 
 	test("link variant is a text link (underline), not a filled pill", () => {
