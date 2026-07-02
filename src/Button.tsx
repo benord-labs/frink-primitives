@@ -66,6 +66,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 			target,
 			rel,
 			disabled,
+			type = "button",
 			className,
 			children,
 			...props
@@ -109,9 +110,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 		return (
 			<button
 				ref={ref}
-				// Default to a non-submitting button (a caller's `type` in props still wins),
-				// so a Button dropped inside a <form> never submits it by accident.
-				type="button"
+				// Default to a non-submitting button so a Button in a <form> never submits by
+				// accident. `type` is destructured out of props, so its default wins over an
+				// `undefined` spread value, while an explicit caller type (e.g. "submit") still wins.
+				type={type}
 				disabled={disabled || loading}
 				className={classes}
 				{...props}
