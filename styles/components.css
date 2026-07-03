@@ -53,6 +53,13 @@
 		box-shadow 0.14s ease,
 		background-color 0.14s ease;
 }
+/* Keep icons at their authored size — a button's padding must never flex-shrink the glyph.
+   Descendant (not child) combinator: icons are often wrapped in a <span>. */
+.btn svg {
+	flex-shrink: 0;
+}
+/* Press/hover feedback is filter-only (brightness), never `transform` — a transform here
+   would clobber a consumer's translate or rotate utilities on the button. */
 .btn:hover:not(:disabled):not([aria-disabled="true"]) {
 	filter: brightness(1.1);
 }
