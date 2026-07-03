@@ -63,4 +63,35 @@ describe("Button", () => {
 		assert.ok(cls.includes("underline-offset-4"));
 		assert.ok(cls.includes("text-primary"));
 	});
+
+	test("default radius is the themeable base token, not a hard-coded pill", () => {
+		const cls = buttonVariants({});
+		assert.ok(cls.includes("rounded-[var(--btn-radius-base)]"));
+		// A consumer flips --btn-radius-base to re-skin; no literal rounded-full to leak.
+		assert.ok(!cls.includes("rounded-full"));
+	});
+
+	test("each shape emits ONLY its radius token — cva alone, no base+shape conflict", () => {
+		// Radius lives entirely in the shape variant, so a direct buttonVariants() caller
+		// (no cn()/tailwind-merge) gets exactly one rounded-* class, not two conflicting ones.
+		const sq = buttonVariants({ shape: "square" });
+		assert.ok(sq.includes("rounded-[var(--btn-radius-square)]"));
+		assert.ok(!sq.includes("rounded-[var(--btn-radius-base)]"));
+		assert.ok(
+			buttonVariants({ shape: "pill" }).includes(
+				"rounded-[var(--btn-radius-pill)]",
+			),
+		);
+		assert.ok(
+			buttonVariants({ shape: "md" }).includes(
+				"rounded-[var(--btn-radius-md)]",
+			),
+		);
+	});
+
+	test("shape renders through to the element (base radius merged away)", () => {
+		const html = renderToStaticMarkup(<Button shape="square">Hi</Button>);
+		assert.ok(html.includes("rounded-[var(--btn-radius-square)]"));
+		assert.ok(!html.includes("rounded-[var(--btn-radius-base)]"));
+	});
 });

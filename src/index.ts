@@ -2,7 +2,12 @@ export type { AlertProps, AlertVariant } from "./Alert";
 export { Alert } from "./Alert";
 export type { BadgeProps, BadgeShape, BadgeVariant } from "./Badge";
 export { Badge } from "./Badge";
-export type { ButtonProps, ButtonSize, ButtonVariant } from "./Button";
+export type {
+	ButtonProps,
+	ButtonShape,
+	ButtonSize,
+	ButtonVariant,
+} from "./Button";
 export { Button, buttonVariants } from "./Button";
 export {
 	Card,

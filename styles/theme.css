@@ -237,6 +237,14 @@
 	--warning-fg: var(--warning-800);
 	--card-shadow: 0 1px 2px 0 #0000000d, 0 8px 24px -14px #00000029;
 	--hover-overlay: #0000000d;
+	/* Button shape radii — themeable per consumer. --btn-radius-base is the DEFAULT
+	   (no `shape` prop); a consumer flips it to re-skin every default button without
+	   touching call sites. Values mirror the design source (.pen cornerRadius 999/10/0).
+	   Radius is theme-independent, so these live only in :root (not .dark). */
+	--btn-radius-base: var(--btn-radius-pill);
+	--btn-radius-pill: 9999px;
+	--btn-radius-md: 10px;
+	--btn-radius-square: 0px;
 }
 
 /* ═══════════════ Dark theme (.dark on <html>) ═══════════════
