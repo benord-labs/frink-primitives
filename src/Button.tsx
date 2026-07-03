@@ -9,7 +9,7 @@ import {
 import { cn } from "./cn";
 
 export const buttonVariants = cva(
-	"btn inline-flex cursor-pointer select-none items-center justify-center whitespace-nowrap rounded-full font-medium leading-none tracking-[0.01em] outline-none transition-[filter,box-shadow,background-color,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
+	"btn inline-flex cursor-pointer select-none items-center justify-center whitespace-nowrap font-medium leading-none tracking-[0.01em] outline-none transition-[filter,box-shadow,background-color,border-color] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-bg disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50",
 	{
 		variants: {
 			variant: {
@@ -29,8 +29,20 @@ export const buttonVariants = cva(
 				icon: "size-5 p-0",
 			},
 			iconOnly: { true: "aspect-square px-0", false: "" },
+			// Corner geometry, orthogonal to variant/size. Radius lives ENTIRELY in this
+			// variant (not the base string) so cva emits exactly ONE rounded-* class even
+			// without tailwind-merge — a direct buttonVariants() caller never gets two
+			// conflicting radii. `default` (the defaultVariants pick) resolves to the
+			// themeable --btn-radius-base token, so a consumer flips its default button
+			// shape with one token.
+			shape: {
+				default: "rounded-[var(--btn-radius-base)]",
+				pill: "rounded-[var(--btn-radius-pill)]",
+				md: "rounded-[var(--btn-radius-md)]",
+				square: "rounded-[var(--btn-radius-square)]",
+			},
 		},
-		defaultVariants: { variant: "primary", size: "md" },
+		defaultVariants: { variant: "primary", size: "md", shape: "default" },
 	},
 );
 
@@ -39,6 +51,9 @@ export type ButtonVariant = NonNullable<
 >;
 export type ButtonSize = NonNullable<
 	VariantProps<typeof buttonVariants>["size"]
+>;
+export type ButtonShape = NonNullable<
+	VariantProps<typeof buttonVariants>["shape"]
 >;
 
 export interface ButtonProps
@@ -60,6 +75,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 			variant,
 			size,
 			iconOnly,
+			shape,
 			loading = false,
 			asChild = false,
 			href,
@@ -73,7 +89,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 		},
 		ref,
 	) {
-		const classes = cn(buttonVariants({ variant, size, iconOnly }), className);
+		const classes = cn(
+			buttonVariants({ variant, size, iconOnly, shape }),
+			className,
+		);
 
 		if (asChild) {
 			// ponytail: loading spinner is non-asChild only (ticket keeps loading on
