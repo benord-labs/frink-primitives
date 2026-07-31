@@ -245,6 +245,15 @@
 	--btn-radius-pill: 9999px;
 	--btn-radius-md: 10px;
 	--btn-radius-square: 0px;
+	/* Field geometry — same themeable contract as --btn-radius-*. --field-height-base
+	   and --field-pad-y-base are what a default (no `size` prop) Input resolves to; the
+	   values here reproduce the pre-0.7 intrinsic field exactly, so consumers that never
+	   set them see no change. A dense consumer flips both and re-scales every unsized
+	   field without touching a call site. Geometry is theme-independent, so these live
+	   only in :root (not .dark). */
+	--field-radius: 10px;
+	--field-height-base: auto;
+	--field-pad-y-base: 0.625rem;
 }
 
 /* ═══════════════ Dark theme (.dark on <html>) ═══════════════
