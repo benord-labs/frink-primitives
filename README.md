@@ -76,6 +76,12 @@ Surfaces `bg`/`surface`/`elevated`/`raised`; text `ink`/`muted`/`dim`; borders
 `primary`/`secondary`/`neutral`/`danger`/`warning`/`info` (50–950) + role aliases
 `secondary`/`success`/`danger`/`warning`/`info`; status `online`; form `field`/`ring`.
 
+Geometry tokens are themeable per consumer and theme-independent (`:root` only):
+`--btn-radius-base`/`-pill`/`-md`/`-square` for Button, and `--field-radius` (shared by
+`Input`/`Textarea`/`Select`) plus `--field-height-base`/`--field-pad-y-base`, which a
+default (no `size` prop) `Input` resolves to. Flip those two to re-scale every unsized
+field without touching a call site.
+
 ## Theming (light & dark)
 
 Class-based, following the standard Tailwind v4 convention. The base theme is
