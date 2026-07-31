@@ -18,7 +18,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 					ref={ref}
 					data-error={error || undefined}
 					className={cn(
-						"w-full appearance-none rounded-[10px] border border-field-border bg-field py-2.5 pr-9 pl-3 text-sm text-ink outline-none transition-[border-color,box-shadow]",
+						"w-full appearance-none rounded-[var(--field-radius)] border border-field-border bg-field py-2.5 pr-9 pl-3 text-sm text-ink outline-none transition-[border-color,box-shadow]",
 						"focus:border-primary focus:ring-2 focus:ring-primary/25",
 						"data-[error=true]:border-danger data-[error=true]:focus:ring-danger/25",
 						"disabled:cursor-not-allowed disabled:opacity-50",
