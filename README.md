@@ -76,6 +76,11 @@ Surfaces `bg`/`surface`/`elevated`/`raised`; text `ink`/`muted`/`dim`; borders
 `primary`/`secondary`/`neutral`/`danger`/`warning`/`info` (50–950) + role aliases
 `secondary`/`success`/`danger`/`warning`/`info`; status `online`; form `field`/`ring`.
 
+Each status role also ships a `-fg` step — `success-fg`/`danger-fg`/`warning-fg`/`info-fg` —
+for the role used as standalone TEXT or an ICON, where the role alias itself is too light to
+clear WCAG AA. These flip per theme at the token layer, so use `text-info-fg`, never a
+`dark:` pair over a raw ramp step.
+
 Geometry tokens are themeable per consumer and theme-independent (`:root` only):
 `--btn-radius-base`/`-pill`/`-md`/`-square` for Button, and `--field-radius` (shared by
 `Input`/`Textarea`/`Select`) plus `--field-height-base`/`--field-pad-y-base`, which a
