@@ -168,10 +168,45 @@
 	filter: brightness(1.85);
 }
 
+/* ═══════════════ Track — the recessed well behind a Progress fill ═══════════════
+   A machined groove the fill sits IN rather than on: an inset shadow under a hairline
+   ring. --track-recess flips per theme (theme.css); the fallback is the LIGHT value so
+   importing components.css without theme.css still renders a groove, not a flat band. */
+.track-recess {
+	box-shadow: var(
+		--track-recess,
+		inset 0 1px 2px 0 #0000001a,
+		inset 0 0 0 1px #00000012
+	);
+}
+
+/* Indeterminate fill — a 35%-wide sliver sweeping the full track. Travel is 100% -> 286%
+   of the SLIVER's own width, which is exactly one track width, so it enters and exits
+   fully clipped by the track's overflow-hidden. */
+@keyframes track-indeterminate-slide {
+	from {
+		transform: translateX(-100%);
+	}
+	to {
+		transform: translateX(286%);
+	}
+}
+.track-indeterminate {
+	animation: track-indeterminate-slide 1.4s cubic-bezier(0.65, 0, 0.35, 1)
+		infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
 	.glow-rim::before,
 	.glow-rim-primary::before,
 	.glow-rim-danger::before {
 		transition: none;
+	}
+	/* Freeze the sliver at the track's left edge — a still 35% fill still reads as
+	   "working", where animation:none alone would leave it parked off-screen (an
+	   apparently EMPTY bar) at its translateX(-100%) start. */
+	.track-indeterminate {
+		animation: none;
+		transform: none;
 	}
 }

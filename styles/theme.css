@@ -258,6 +258,15 @@
 	--field-radius: 10px;
 	--field-height-base: auto;
 	--field-pad-y-base: 0.625rem;
+	/* Track geometry (Progress) — same themeable contract again. --track-height-base is
+	   what a default (no `size` prop) Progress resolves to. Geometry is theme-independent,
+	   so these live only in :root (not .dark). */
+	--track-radius: 9999px;
+	--track-height-base: 0.5rem;
+	/* The recessed track well (.track-recess) — a machined groove the fill sits IN. This
+	   one IS per-theme: on near-black the groove is a hard black shadow under a white
+	   hairline; on near-white the same depth reads as a soft black shadow. */
+	--track-recess: inset 0 1px 2px 0 #0000001a, inset 0 0 0 1px #00000012;
 }
 
 /* ═══════════════ Dark theme (.dark on <html>) ═══════════════
@@ -297,4 +306,5 @@
 	--info-fg: var(--info-500);
 	--card-shadow: inset 0 1px 0 #ffffff0a, 0 8px 24px -12px #000000;
 	--hover-overlay: #ffffff0d;
+	--track-recess: inset 0 1px 2px 0 #000000e6, inset 0 0 0 1px #ffffff0a;
 }
