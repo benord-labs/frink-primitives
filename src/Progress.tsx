@@ -32,7 +32,13 @@ const TONE = {
 	danger: "bg-danger",
 	info: "bg-info",
 	online: "bg-online",
-	muted: "bg-rim",
+	// --dim, not --rim. A quiet segment is usually the BIGGEST one (a queue is mostly
+	// queued), so it has to stay legible or the bar under-reports itself. Against the
+	// --elevated track, dim is the balanced choice — 2.08:1 dark / 2.33:1 light, where
+	// rim is lopsided (2.51 / 1.41) and border vanishes in both (1.34 / 1.16). Neither
+	// reaches the 3:1 non-text bar, which is why the stripes are aria-hidden and the
+	// legend carries the numbers as text.
+	muted: "bg-dim",
 } as const;
 
 export type ProgressTone = keyof typeof TONE;
