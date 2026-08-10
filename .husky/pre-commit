@@ -11,6 +11,89 @@ done
 export PATH
 
 # >>> devkit-guards >>>
+# devkit:commit-terminal
+if [ -z "${DEVKIT_SHIP_ID:-}" ] && [ -z "${DEVKIT_REVIEW_ID:-}" ] && [ -z "${DEVKIT_NO_TELEMETRY:-}" ]; then
+    __dk_nonce="$(uuidgen 2>/dev/null || true)"
+    if [ -z "$__dk_nonce" ] && [ -r /dev/urandom ]; then
+        __dk_nonce="$(od -An -N16 -tx1 /dev/urandom 2>/dev/null | tr -d ' \n')" || __dk_nonce=""
+    fi
+    [ -n "$__dk_nonce" ] || __dk_nonce="$$-$(date +%s)"
+    DEVKIT_COMMIT_ID="commit-run-$__dk_nonce"
+    export DEVKIT_COMMIT_ID
+
+    __dk_t0="$(date +%s)"
+    __dk_esc() { printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'; }
+    __dk_commit_result() {
+        [ -n "${__dk_done:-}" ] && return 0
+        __dk_done=1
+        __dk_tree="$(git write-tree 2>/dev/null)" || return 0
+        [ -n "$__dk_tree" ] || return 0
+        if [ "${1:-0}" -eq 0 ] && [ -n "${__dk_commit_state:-}" ]; then
+            printf '%s\n%s\n' "$DEVKIT_COMMIT_ID" "$__dk_tree" > "$__dk_commit_state" 2>/dev/null || true
+        fi
+        __dk_events="${DEVKIT_GATE_EVENTS:-$HOME/.devkit/telemetry/gate-events.jsonl}"
+        mkdir -p "$(dirname "$__dk_events")" 2>/dev/null || return 0
+        printf '{"type":"commit_result","ship_id":"%s","commit_tree":"%s","run_mode":"commit","repo":"%s","branch":"%s","exit_code":%d,"duration_s":%d,"ts":"%s"}\n' \
+            "$(__dk_esc "$DEVKIT_COMMIT_ID")" "$__dk_tree" \
+            "$(__dk_esc "$(basename "$(git rev-parse --show-toplevel 2>/dev/null)")")" \
+            "$(__dk_esc "$(git rev-parse --abbrev-ref HEAD 2>/dev/null)")" \
+            "${1:-0}" "$(( $(date +%s) - __dk_t0 ))" \
+            "$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$__dk_events" 2>/dev/null || true
+        if [ "${1:-0}" -ne 0 ] && [ -n "${__dk_commit_state:-}" ]; then
+            rm -f "$__dk_commit_state" 2>/dev/null || true
+        fi
+    }
+    trap '__dk_commit_result "$?"' EXIT
+fi
+# /devkit:commit-terminal
+
+__dk_gate_selected() {
+    [ "${DEVKIT_RUN_MODE:-}" != "review" ] && return 0
+    __dk_review_guards=$(printf '%s' "${DEVKIT_REVIEW_GUARDS:-}" | sed         -e 's/[[:space:]]*,[[:space:]]*/,/g'         -e 's/^[[:space:]]*//'         -e 's/[[:space:]]*$//')
+    case ",${__dk_review_guards}," in
+        *,"$1",*) return 0 ;;
+        *) return 1 ;;
+    esac
+}
+
+__dk_no_git_env() {
+    env -u GIT_ALTERNATE_OBJECT_DIRECTORIES \
+        -u GIT_CONFIG \
+        -u GIT_CONFIG_PARAMETERS \
+        -u GIT_CONFIG_COUNT \
+        -u GIT_OBJECT_DIRECTORY \
+        -u GIT_DIR \
+        -u GIT_WORK_TREE \
+        -u GIT_IMPLICIT_WORK_TREE \
+        -u GIT_GRAFT_FILE \
+        -u GIT_INDEX_FILE \
+        -u GIT_NO_REPLACE_OBJECTS \
+        -u GIT_REPLACE_REF_BASE \
+        -u GIT_PREFIX \
+        -u GIT_SHALLOW_FILE \
+        -u GIT_COMMON_DIR \
+        -u GIT_GLOB_PATHSPECS \
+        -u GIT_NOGLOB_PATHSPECS \
+        -u GIT_LITERAL_PATHSPECS \
+        -u GIT_ICASE_PATHSPECS "$@"
+}
+
+__dk_review_baseline_gate() {
+    [ -n "${DEVKIT_REVIEW_BASELINE_DIR:-}" ] || {
+        echo "devkit review: merge-base baseline runtime is missing — reinstall/rebuild Devkit." >&2
+        return 1
+    }
+    __dk_baseline_gate=
+    for __dk_candidate in "${DEVKIT_REVIEW_PACKAGE_ROOT:-}/gate-engine/review/baseline-gate.mjs" "${DEVKIT_REVIEW_PACKAGE_ROOT:-}/gate-engine/review/baseline-gate.mts"; do
+        if [ -f "$__dk_candidate" ]; then __dk_baseline_gate=$__dk_candidate; break; fi
+    done
+    [ -n "$__dk_baseline_gate" ] || {
+        echo "devkit review: baseline helper is missing — reinstall/rebuild Devkit." >&2
+        return 1
+    }
+    node "$__dk_baseline_gate" "$1" "$DEVKIT_REVIEW_BASELINE_DIR"
+}
+
 # devkit:biome-format
 # Format staged files with biome, then re-stage exactly those (scoped — never a blanket
 # `git add -u`, which would sweep unrelated working-tree changes into the commit). Only
@@ -24,59 +107,35 @@ if [ -n "$STAGED_FMT" ]; then
     if [ -n "$FMT_SAFE" ]; then
         echo "🎨 Formatting staged files..."
         echo "$FMT_SAFE" | xargs bunx biome format --write 2>/dev/null || true
-        echo "$FMT_SAFE" | xargs git add
+        echo "$FMT_SAFE" | xargs git add -f
     fi
 fi
 # /devkit:biome-format
 
-# Structure lint (folder-structure + max-lines). OFF for this stack — uncomment after a
-# structure preset is wired.
-bunx guard-structure || exit 1
+# devkit:deterministic
+echo "🚧 Deterministic gates (aggregated)..."
+__dk_no_git_env bunx guard-deterministic --hook "${DK_HOOK_PATH:-$0}" --structure "guard-structure gate" || exit 1
+# /devkit:deterministic
 
-# devkit:guard-size
-echo "📏 Size-debt ratchet..."
-# set -e-safe: husky runs hooks under `sh -e`, so a bare `bunx … gate` returning its
-# fail-open code (2) would abort the whole hook before this check. `|| src=$?` neutralises
-# set -e (the call is now a tested command) AND captures the code.
-src=0
-bunx guard-size gate || src=$?
-if [ "$src" -eq 1 ]; then
-    echo "   Re-freeze after a deliberate audit: bunx guard-size freeze"
+if __dk_gate_selected decisions; then
+# devkit:guard-decisions
+echo "🧭 Decision-log gate..."
+ddrc=0
+__dk_no_git_env bunx guard-decisions detect --gate || ddrc=$?
+if [ "$ddrc" -eq 1 ]; then
+    echo "   Record the decision target, or bypass a non-decision: GUARD_NO_LOG=1 git commit ..."
     exit 1
-elif [ "$src" -ne 0 ] && [ "$src" -ne 2 ]; then
-    echo "   guard-size: unexpected exit $src — blocking the commit."
+elif [ "$ddrc" -eq 3 ]; then
+    echo "   guard-decisions: judge unavailable — strict ship mode failed closed."
+    echo "   Check \`claude\` CLI auth/quota, then re-run devkit ship (cleared judgements are cached)."
+    exit 1
+elif [ "$ddrc" -ne 0 ] && [ "$ddrc" -ne 2 ]; then
+    echo "   guard-decisions: unexpected exit $ddrc — blocking the commit."
     exit 1
 fi
-# src 0 = ok / shrank, src 2 = baseline missing (fail-open) → continue; any other code blocks.
-# /devkit:guard-size
-
-# devkit:guard-dup
-echo "🔁 Duplication gate (semantic)..."
-drc=0
-bunx guard-dup scan --new --changed --gate || drc=$?
-if [ "$drc" -eq 1 ]; then
-    echo "   New duplication. Refactor it, or run the approval command the gate printed above."
-    exit 1
-elif [ "$drc" -ne 0 ] && [ "$drc" -ne 2 ]; then
-    echo "   guard-dup: unexpected exit $drc — blocking the commit."
-    exit 1
+# ddrc 0 = clean / staged / routine / bypassed, ddrc 2 = fail-open → continue; any other code blocks.
+# /devkit:guard-decisions
 fi
-# drc 0 = clean, drc 2 = could-not-run (fail-open) → continue; any other code blocks.
-# /devkit:guard-dup
-
-# devkit:guard-clone
-echo "🔁 Clone gate (verbatim)..."
-crc=0
-bunx guard-clone scan --changed --gate || crc=$?
-if [ "$crc" -eq 1 ]; then
-    echo "   New verbatim clone. Refactor it, or run the approval command the gate printed above."
-    exit 1
-elif [ "$crc" -ne 0 ] && [ "$crc" -ne 2 ]; then
-    echo "   guard-clone: unexpected exit $crc — blocking the commit."
-    exit 1
-fi
-# crc 0 = clean, crc 2 = could-not-run (fail-open) → continue; any other code blocks.
-# /devkit:guard-clone
 # <<< devkit-guards <<<
 
 exit 0
