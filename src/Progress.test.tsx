@@ -114,6 +114,21 @@ describe("Progress — segmented", () => {
 		);
 	});
 
+	test("the muted tone is --dim, the balanced-contrast grey — not --rim", () => {
+		// A quiet segment is usually the biggest one, so it must stay legible against the
+		// --elevated track. Measured against it: dim 2.08:1 dark / 2.33:1 light, rim 2.51 /
+		// 1.41 (lopsided), border 1.34 / 1.16 (invisible). Pinned so it is not "tidied"
+		// back to rim — the light theme is what pays for that.
+		const html = renderToStaticMarkup(
+			<Progress
+				segments={[{ key: "queued", value: 1, tone: "muted" }]}
+				legend
+			/>,
+		);
+		assert.equal(html.match(/bg-dim/g)?.length, 2);
+		assert.ok(!html.includes("bg-rim"));
+	});
+
 	test("a segment className recolours the stripe AND its legend dot together", () => {
 		const html = renderToStaticMarkup(
 			<Progress
