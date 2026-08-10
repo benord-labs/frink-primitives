@@ -6,13 +6,14 @@ the marketing site and (later) the internal app.
 ## What's inside
 
 - **`src/`** — React primitives: `Alert`, `Badge`, `Button` (+`buttonVariants`), `Card`
-  (+sub-parts), `Checkbox`, `FormMessage`, `Input`, `Label`, `Radio`/`RadioGroup`,
-  `Select`, `Separator`, `Switch`, `Tabs`, `Textarea`, `Tile` (+`DiagonalCutDefs`),
-  `TileSurface`, `Tooltip`, and the `cn` class joiner.
+  (+sub-parts), `Checkbox`, `FormMessage`, `Input`, `Label`, `Progress`
+  (+`progressVariants`), `Radio`/`RadioGroup`, `Select`, `Separator`, `Switch`, `Tabs`,
+  `Textarea`, `Tile` (+`DiagonalCutDefs`), `TileSurface`, `Tooltip`, and the `cn` class
+  joiner.
 - **`styles/`** — `theme.css` (design tokens + `@theme inline`), `components.css`
   (recipe classes: `tile-rim`, `glow-rim*`, `clip-diagonal-cut`, `tile-notch`, `btn`,
-  `@property --rim-angle`), and `index.css` (entry: imports both + a self-relative
-  `@source "../src"`).
+  `track-recess`, `track-indeterminate`, `@property --rim-angle`), and `index.css`
+  (entry: imports both + a self-relative `@source "../src"`).
 - **`eslint-rules/no-raw-color.mjs`** — the `frink/no-raw-color` rule (colours must use
   tokens, no raw hex / Tailwind palette classes).
 - **`designs/frink-primitives.pen`** — the Pencil design source of truth. Edit it here.
@@ -69,6 +70,21 @@ Peers the consumer must provide: `react >=19`, `react-dom >=19`, `tailwindcss >=
 import { Button, Card, TileSurface } from '@benord-labs/frink-primitives';
 ```
 
+`Progress` has three modes, in precedence order — `segments` → `indeterminate` → `value`:
+
+```tsx
+<Progress value={64} />        // determinate
+<Progress indeterminate />     // unknown progress
+<Progress legend segments={[   // a queue split across states
+  { key: 'running', label: 'Running', value: 6,  tone: 'primary' },
+  { key: 'review',  label: 'Review',  value: 1,  tone: 'primary-soft' },
+  { key: 'queued',  label: 'Queued',  value: 15, tone: 'muted' },
+]} />
+```
+
+The legend's counts and the stripe widths come from that one array, so they cannot drift.
+Without `legend`, the same numbers are still exposed as an `sr-only` summary.
+
 ## Tokens
 
 Surfaces `bg`/`surface`/`elevated`/`raised`; text `ink`/`muted`/`dim`; borders
@@ -76,11 +92,20 @@ Surfaces `bg`/`surface`/`elevated`/`raised`; text `ink`/`muted`/`dim`; borders
 `primary`/`secondary`/`neutral`/`danger`/`warning`/`info` (50–950) + role aliases
 `secondary`/`success`/`danger`/`warning`/`info`; status `online`; form `field`/`ring`.
 
+Each status role also ships a `-fg` step — `success-fg`/`danger-fg`/`warning-fg`/`info-fg` —
+for the role used as standalone TEXT or an ICON, where the role alias itself is too light to
+clear WCAG AA. These flip per theme at the token layer, so use `text-info-fg`, never a
+`dark:` pair over a raw ramp step.
+
 Geometry tokens are themeable per consumer and theme-independent (`:root` only):
 `--btn-radius-base`/`-pill`/`-md`/`-square` for Button, and `--field-radius` (shared by
 `Input`/`Textarea`/`Select`) plus `--field-height-base`/`--field-pad-y-base`, which a
 default (no `size` prop) `Input` resolves to. Flip those two to re-scale every unsized
-field without touching a call site.
+field without touching a call site. `Progress` follows the same contract with
+`--track-radius` and `--track-height-base`.
+
+`--track-recess` is the one track token that is NOT geometry — it is the inset shadow
+that makes the well look machined, so it flips per theme alongside `--card-shadow`.
 
 ## Theming (light & dark)
 
