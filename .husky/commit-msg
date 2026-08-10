@@ -1,0 +1,14 @@
+#!/bin/sh
+# devkit generic commit-msg hook (POSIX sh). The commit-MESSAGE judges live here, not in
+# pre-commit: the message only exists once git has it (passed as the message-file path in $1).
+# The block between the two `# devkit-guards` markers is devkit-owned and is the only region
+# init / removal touches — everything outside it is the consumer's own hook.
+
+# GUI git clients launch with a minimal PATH that omits user bin dirs, so `bun`/`bunx`
+# can go missing → the hook fails. Prepend the standard user install locations.
+for dir in "$HOME/.bun/bin" "$HOME/.local/bin"; do
+    [ -d "$dir" ] && case ":$PATH:" in *":$dir:"*) ;; *) PATH="$dir:$PATH" ;; esac
+done
+export PATH
+
+exit 0

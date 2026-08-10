@@ -25,6 +25,13 @@ export { FormMessage } from "./FormMessage";
 export type { InputProps, InputSize } from "./Input";
 export { Input, inputVariants } from "./Input";
 export { Label } from "./Label";
+export type {
+	ProgressProps,
+	ProgressSegment,
+	ProgressSize,
+	ProgressTone,
+} from "./Progress";
+export { Progress, progressVariants } from "./Progress";
 export type { RadioGroupProps, RadioProps } from "./Radio";
 export { Radio, RadioGroup } from "./Radio";
 export type { SelectProps } from "./Select";
