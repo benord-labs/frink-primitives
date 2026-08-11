@@ -47,6 +47,17 @@ describe("ActivityRow", () => {
 		assert.ok(!html.includes('gap-2.5"><span class="shrink-0'));
 	});
 
+	test("keeps the neutral status dot quiet but legible across consumer themes", () => {
+		const html = renderToStaticMarkup(
+			<ActivityRow leading={<span>G</span>} title="Ready to start" />,
+		);
+
+		assert.ok(html.includes('data-state="neutral"'));
+		assert.ok(html.includes("Status: Neutral"));
+		assert.ok(html.includes("bg-dim"));
+		assert.ok(!html.includes("bg-muted"));
+	});
+
 	test("renders a keyboard-native button only when activation is provided", () => {
 		const interactive = renderToStaticMarkup(
 			<ActivityRow
