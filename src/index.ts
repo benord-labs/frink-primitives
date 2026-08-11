@@ -1,3 +1,9 @@
+export type {
+	ActivityRowProps,
+	ActivityRowSize,
+	ActivityRowState,
+} from "./ActivityRow";
+export { ActivityRow } from "./ActivityRow";
 export type { AlertProps, AlertVariant } from "./Alert";
 export { Alert } from "./Alert";
 export type { BadgeProps, BadgeShape, BadgeVariant } from "./Badge";

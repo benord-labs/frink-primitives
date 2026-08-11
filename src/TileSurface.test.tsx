@@ -39,4 +39,14 @@ describe("TileSurface", () => {
 		assert.ok(css.includes("var(--color-rim, var(--rim))"));
 		assert.ok(css.includes("var(--color-primary, var(--primary, #a78bfa))"));
 	});
+
+	test("keeps the one-pixel primary outer ring in the attention recipe", () => {
+		const attentionRecipe = css.match(
+			/\.tile-rim-attention\s*\{(?<body>[\s\S]*?)\n\}/,
+		)?.groups?.body;
+
+		assert.ok(attentionRecipe);
+		assert.ok(attentionRecipe.includes("0 0 0 1px"));
+		assert.ok(attentionRecipe.includes(") 26%"));
+	});
 });
