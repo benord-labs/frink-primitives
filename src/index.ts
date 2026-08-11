@@ -2,6 +2,7 @@ export type {
 	ActivityRowProps,
 	ActivityRowSize,
 	ActivityRowState,
+	ActivityRowTrailingWidth,
 } from "./ActivityRow";
 export { ActivityRow } from "./ActivityRow";
 export type { AlertProps, AlertVariant } from "./Alert";

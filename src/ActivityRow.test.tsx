@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { describe, test } from "node:test";
 import { renderToStaticMarkup } from "react-dom/server";
 import { ActivityRow } from "./ActivityRow";
+import { Button } from "./Button";
 
 const css = readFileSync(
 	new URL("../styles/components.css", import.meta.url),
@@ -35,6 +36,9 @@ describe("ActivityRow", () => {
 		assert.ok(html.includes('data-state="running"'));
 		assert.ok(html.includes("Status: Running"));
 		assert.ok(html.includes("bg-online"));
+		assert.ok(html.includes("activity-row-meta"));
+		assert.ok(html.includes("activity-row-trailing"));
+		assert.ok(html.includes("min-w-7"));
 	});
 
 	test("omits empty optional slot wrappers", () => {
@@ -42,9 +46,35 @@ describe("ActivityRow", () => {
 			<ActivityRow leading={<span>G</span>} title="Only a title" />,
 		);
 
-		assert.ok(!html.includes("w-7"));
+		assert.ok(!html.includes("min-w-7"));
 		assert.ok(!html.includes("pl-3.5"));
 		assert.ok(!html.includes('gap-2.5"><span class="shrink-0'));
+	});
+
+	test("reserves an aligned wide rail for mixed values and controls", () => {
+		const value = renderToStaticMarkup(
+			<ActivityRow
+				leading={<span>G</span>}
+				title="Running"
+				trailing="7 months"
+				trailingWidth="wide"
+			/>,
+		);
+		const control = renderToStaticMarkup(
+			<ActivityRow
+				leading={<span>G</span>}
+				title="Ready"
+				trailing={<Button size="xs">Start task</Button>}
+				trailingWidth="wide"
+			/>,
+		);
+
+		for (const html of [value, control]) {
+			assert.ok(html.includes("min-w-24"));
+			assert.ok(html.includes("justify-end"));
+			assert.ok(html.includes("whitespace-nowrap"));
+		}
+		assert.equal(control.match(/<button/g)?.length, 1);
 	});
 
 	test("keeps the neutral status dot quiet but legible across consumer themes", () => {
