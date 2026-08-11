@@ -1,11 +1,15 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "./cn";
 
+export type TileSurfaceVariant = "default" | "attention";
+
 export interface TileSurfaceProps extends HTMLAttributes<HTMLDivElement> {
 	/** Content nestled into the diagonal-cut notch (top-right) — e.g. a year or label. */
 	corner?: ReactNode;
 	/** Override the inner content padding/layout (defaults to a vertical stack). */
 	contentClassName?: string;
+	/** Visual treatment for the surface. `attention` adds the restrained accent edge used for human-review cards. */
+	variant?: TileSurfaceVariant;
 }
 
 /**
@@ -19,11 +23,16 @@ export function TileSurface({
 	className,
 	contentClassName,
 	children,
+	variant = "default",
 	...props
 }: TileSurfaceProps) {
 	return (
 		<div
-			className={cn("tile-rim relative rounded-[22px] bg-bg p-3", className)}
+			className={cn(
+				"tile-rim relative rounded-[22px] bg-bg p-3",
+				variant === "attention" && "tile-rim-attention",
+				className,
+			)}
 			{...props}
 		>
 			<div className="relative overflow-hidden rounded-[14px]">
