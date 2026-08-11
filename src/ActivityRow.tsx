@@ -15,6 +15,8 @@ export type ActivityRowState =
 
 export type ActivityRowSize = "sm" | "md";
 
+export type ActivityRowTrailingWidth = "compact" | "wide";
+
 const STATE_DOT: Record<ActivityRowState, string> = {
 	// --dim stays a quiet, legible signal when consumers reserve --muted for surfaces.
 	neutral: "bg-dim",
@@ -30,6 +32,11 @@ const STATE_LABEL: Record<ActivityRowState, string> = {
 	success: "Succeeded",
 	warning: "Warning",
 	error: "Failed",
+};
+
+const TRAILING_WIDTH: Record<ActivityRowTrailingWidth, string> = {
+	compact: "min-w-7",
+	wide: "min-w-24",
 };
 
 const SIZE = {
@@ -59,6 +66,8 @@ export interface ActivityRowProps
 	meta?: ReactNode;
 	/** Final compact value, usually elapsed time. */
 	trailing?: ReactNode;
+	/** Width preset for the final rail. `wide` aligns lists that mix values and controls. */
+	trailingWidth?: ActivityRowTrailingWidth;
 	/** Semantic state that drives the status dot and screen-reader copy. */
 	state?: ActivityRowState;
 	/** Density preset. `md` matches Frink's desktop activity list. */
@@ -76,7 +85,13 @@ export interface ActivityRowProps
 
 type ActivityRowContentProps = Pick<
 	ActivityRowProps,
-	"description" | "leading" | "meta" | "state" | "title" | "trailing"
+	| "description"
+	| "leading"
+	| "meta"
+	| "state"
+	| "title"
+	| "trailing"
+	| "trailingWidth"
 > & {
 	geometry: (typeof SIZE)[ActivityRowSize];
 };
@@ -102,14 +117,22 @@ function ActivityRowDescription({
 function ActivityRowMeta({ meta }: { meta: ReactNode }) {
 	if (meta == null) return null;
 
-	return <span className="shrink-0">{meta}</span>;
+	return <span className="activity-row-meta shrink-0">{meta}</span>;
 }
 
-function ActivityRowTrailingValue({ trailing }: { trailing: ReactNode }) {
+function ActivityRowTrailingValue({
+	trailing,
+	trailingWidth = "compact",
+}: Pick<ActivityRowProps, "trailing" | "trailingWidth">) {
 	if (trailing == null) return null;
 
 	return (
-		<span className="w-7 shrink-0 text-right text-[10px] text-muted-fg tabular-nums">
+		<span
+			className={cn(
+				"activity-row-trailing inline-flex shrink-0 items-center justify-end whitespace-nowrap text-right text-[10px] text-muted-fg tabular-nums",
+				TRAILING_WIDTH[trailingWidth],
+			)}
+		>
 			{trailing}
 		</span>
 	);
@@ -118,13 +141,17 @@ function ActivityRowTrailingValue({ trailing }: { trailing: ReactNode }) {
 function ActivityRowEnd({
 	meta,
 	trailing,
-}: Pick<ActivityRowProps, "meta" | "trailing">) {
+	trailingWidth,
+}: Pick<ActivityRowProps, "meta" | "trailing" | "trailingWidth">) {
 	if (meta == null && trailing == null) return null;
 
 	return (
 		<span className="flex shrink-0 items-center gap-2.5">
 			<ActivityRowMeta meta={meta} />
-			<ActivityRowTrailingValue trailing={trailing} />
+			<ActivityRowTrailingValue
+				trailing={trailing}
+				trailingWidth={trailingWidth}
+			/>
 		</span>
 	);
 }
@@ -135,6 +162,7 @@ function ActivityRowContent({
 	description,
 	meta,
 	trailing,
+	trailingWidth = "compact",
 	state = "neutral",
 	geometry,
 }: ActivityRowContentProps) {
@@ -165,7 +193,11 @@ function ActivityRowContent({
 					className={geometry.description}
 				/>
 			</span>
-			<ActivityRowEnd meta={meta} trailing={trailing} />
+			<ActivityRowEnd
+				meta={meta}
+				trailing={trailing}
+				trailingWidth={trailingWidth}
+			/>
 		</>
 	);
 }
@@ -181,6 +213,7 @@ export function ActivityRow({
 	description,
 	meta,
 	trailing,
+	trailingWidth = "compact",
 	state = "neutral",
 	size = "md",
 	onActivate,
@@ -197,6 +230,7 @@ export function ActivityRow({
 			description={description}
 			meta={meta}
 			trailing={trailing}
+			trailingWidth={trailingWidth}
 			state={state}
 			geometry={geometry}
 		/>

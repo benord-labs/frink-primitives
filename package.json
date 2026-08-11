@@ -1,6 +1,6 @@
 {
 	"name": "@benord-labs/frink-primitives",
-	"version": "0.10.1",
+	"version": "0.10.2",
 	"description": "Frink shared UI primitives + design tokens (Tailwind v4).",
 	"type": "module",
 	"license": "UNLICENSED",
