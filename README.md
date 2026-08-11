@@ -5,8 +5,8 @@ the marketing site and (later) the internal app.
 
 ## What's inside
 
-- **`src/`** — React primitives: `Alert`, `Badge`, `Button` (+`buttonVariants`), `Card`
-  (+sub-parts), `Checkbox`, `FormMessage`, `Input`, `Label`, `Progress`
+- **`src/`** — React primitives: `ActivityRow`, `Alert`, `Badge`, `Button`
+  (+`buttonVariants`), `Card` (+sub-parts), `Checkbox`, `FormMessage`, `Input`, `Label`, `Progress`
   (+`progressVariants`), `Radio`/`RadioGroup`, `Select`, `Separator`, `Switch`, `Tabs`,
   `Textarea`, `Tile` (+`DiagonalCutDefs`), `TileSurface`, `Tooltip`, and the `cn` class
   joiner.
@@ -72,6 +72,23 @@ import { Button, Card, TileSurface } from '@benord-labs/frink-primitives';
 
 Use `TileSurface variant="attention"` for the restrained accent rim on a human-review
 or awaiting-input card. The default stays neutral for account, auth, and content surfaces.
+
+`ActivityRow` owns the dense, divided activity-list presentation while callers supply
+their domain data and activation behavior:
+
+```tsx
+<ul>
+  <ActivityRow
+    state="running"
+    leading={<Github aria-hidden />}
+    title="Fix flaky auth test"
+    description="From CI · login session expiry"
+    meta={<Badge shape="tag" noDot>frink-web</Badge>}
+    trailing="2m"
+    onActivate={() => openTask(task)}
+  />
+</ul>
+```
 
 `Progress` has three modes, in precedence order — `segments` → `indeterminate` → `value`:
 
