@@ -1,0 +1,96 @@
+// fallow-ignore-file unused-file -- exercised directly by the package's `bun test` script.
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { describe, test } from "node:test";
+import { renderToStaticMarkup } from "react-dom/server";
+import { ActivityRow } from "./ActivityRow";
+
+const css = readFileSync(
+	new URL("../styles/components.css", import.meta.url),
+	"utf8",
+);
+
+describe("ActivityRow", () => {
+	test("renders one semantic list item with every presentation slot", () => {
+		const html = renderToStaticMarkup(
+			<ActivityRow
+				leading={<svg aria-label="GitHub" />}
+				title="Fix flaky auth test"
+				description="From CI · login session expiry"
+				meta={<span>frink-web</span>}
+				trailing="2m"
+				state="running"
+				className="consumer-row"
+				aria-label="Running task"
+			/>,
+		);
+
+		assert.match(html, /^<li /);
+		assert.ok(html.includes("Fix flaky auth test"));
+		assert.ok(html.includes("From CI · login session expiry"));
+		assert.ok(html.includes("frink-web"));
+		assert.ok(html.includes(">2m</span>"));
+		assert.ok(html.includes("consumer-row"));
+		assert.ok(html.includes('aria-label="Running task"'));
+		assert.ok(html.includes('data-state="running"'));
+		assert.ok(html.includes("Status: Running"));
+		assert.ok(html.includes("bg-online"));
+	});
+
+	test("omits empty optional slot wrappers", () => {
+		const html = renderToStaticMarkup(
+			<ActivityRow leading={<span>G</span>} title="Only a title" />,
+		);
+
+		assert.ok(!html.includes("w-7"));
+		assert.ok(!html.includes("pl-3.5"));
+		assert.ok(!html.includes('gap-2.5"><span class="shrink-0'));
+	});
+
+	test("renders a keyboard-native button only when activation is provided", () => {
+		const interactive = renderToStaticMarkup(
+			<ActivityRow
+				leading={<span>G</span>}
+				title="Open task"
+				onActivate={() => undefined}
+				actionProps={{ "aria-describedby": "task-help" }}
+			/>,
+		);
+		const passive = renderToStaticMarkup(
+			<ActivityRow leading={<span>G</span>} title="Read only" />,
+		);
+
+		assert.ok(interactive.includes('<button type="button"'));
+		assert.ok(interactive.includes('aria-describedby="task-help"'));
+		assert.ok(interactive.includes("focus-visible:ring-2"));
+		assert.ok(!passive.includes("<button"));
+	});
+
+	test("size presets own compact and desktop geometry", () => {
+		const compact = renderToStaticMarkup(
+			<ActivityRow leading={<span>G</span>} title="Compact" size="sm" />,
+		);
+		const desktop = renderToStaticMarkup(
+			<ActivityRow leading={<span>G</span>} title="Desktop" size="md" />,
+		);
+
+		assert.ok(compact.includes("size-8"));
+		assert.ok(compact.includes("py-2"));
+		assert.ok(desktop.includes("size-9"));
+		assert.ok(desktop.includes("py-2.5"));
+	});
+
+	test("owns the divider and exact machined icon-plate recipe", () => {
+		const html = renderToStaticMarkup(
+			<ActivityRow leading={<span>G</span>} title="Styled" />,
+		);
+
+		assert.ok(html.includes("border-t border-hairline first:border-t-0"));
+		assert.ok(html.includes("activity-row-leading"));
+		assert.ok(
+			css.includes("linear-gradient(180deg, #1c1d20 0%, #0e0e10 100%)"),
+		);
+		assert.ok(css.includes("inset 0 1px 0 rgb(255 255 255 / 12%)"));
+		assert.ok(css.includes("0 6px 16px -10px rgb(0 0 0 / 85%)"));
+	});
+});
