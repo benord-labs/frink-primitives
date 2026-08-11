@@ -16,7 +16,8 @@ export type ActivityRowState =
 export type ActivityRowSize = "sm" | "md";
 
 const STATE_DOT: Record<ActivityRowState, string> = {
-	neutral: "bg-muted",
+	// --dim stays a quiet, legible signal when consumers reserve --muted for surfaces.
+	neutral: "bg-dim",
 	running: "bg-online",
 	success: "bg-secondary",
 	warning: "bg-warning",
