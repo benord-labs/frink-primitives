@@ -25,8 +25,8 @@
 	padding: 1px;
 	background: linear-gradient(
 		225deg,
-		var(--muted) 0%,
-		var(--rim) 50%,
+		var(--color-muted, var(--muted)) 0%,
+		var(--color-rim, var(--rim)) 50%,
 		#2e2e2e 100%
 	);
 	-webkit-mask:
@@ -38,6 +38,30 @@
 	-webkit-mask-composite: xor;
 	mask-composite: exclude;
 	pointer-events: none;
+}
+
+/* Attention surface — the same machined rim with a restrained primary edge and
+   deeper steel bevel. Opt-in so account/auth surfaces keep the neutral default.
+   Resolved --color-primary works for both full-colour package tokens and consumers
+   whose source --primary token is stored as an HSL triplet. */
+.tile-rim-attention {
+	box-shadow:
+		inset 0 1px 0 0 rgb(255 255 255 / 16%),
+		inset 0 -1px 0 0 rgb(0 0 0 / 50%),
+		inset 0 0 0 1px rgb(255 255 255 / 6%),
+		0 18px 44px -22px rgb(0 0 0 / 85%),
+		0 0 0 1px
+		color-mix(
+			in srgb,
+			var(--color-primary, var(--primary, #a78bfa)) 26%,
+			transparent
+		),
+		0 0 18px -10px
+		color-mix(
+			in srgb,
+			var(--color-primary, var(--primary, #a78bfa)) 16%,
+			transparent
+		);
 }
 
 /* Fixed-size diagonal corner notch (top-right). Stays a constant corner accent at
