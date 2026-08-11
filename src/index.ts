@@ -46,7 +46,7 @@ export type { TextareaProps } from "./Textarea";
 export { Textarea } from "./Textarea";
 export type { TileProps } from "./Tile";
 export { DiagonalCutDefs, Tile } from "./Tile";
-export type { TileSurfaceProps } from "./TileSurface";
+export type { TileSurfaceProps, TileSurfaceVariant } from "./TileSurface";
 export { TileSurface } from "./TileSurface";
 export type { TooltipProps } from "./Tooltip";
 export { Tooltip } from "./Tooltip";

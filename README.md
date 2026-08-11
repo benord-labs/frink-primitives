@@ -70,6 +70,9 @@ Peers the consumer must provide: `react >=19`, `react-dom >=19`, `tailwindcss >=
 import { Button, Card, TileSurface } from '@benord-labs/frink-primitives';
 ```
 
+Use `TileSurface variant="attention"` for the restrained accent rim on a human-review
+or awaiting-input card. The default stays neutral for account, auth, and content surfaces.
+
 `Progress` has three modes, in precedence order — `segments` → `indeterminate` → `value`:
 
 ```tsx
