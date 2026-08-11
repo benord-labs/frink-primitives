@@ -70,6 +70,8 @@ export interface ActivityRowProps
 	trailingWidth?: ActivityRowTrailingWidth;
 	/** Semantic state that drives the status dot and screen-reader copy. */
 	state?: ActivityRowState;
+	/** Pulses the status dot for live activity without changing semantic state. */
+	pulse?: boolean;
 	/** Density preset. `md` matches Frink's desktop activity list. */
 	size?: ActivityRowSize;
 	/** Makes the row a keyboard-native button while retaining list semantics. */
@@ -88,6 +90,7 @@ type ActivityRowContentProps = Pick<
 	| "description"
 	| "leading"
 	| "meta"
+	| "pulse"
 	| "state"
 	| "title"
 	| "trailing"
@@ -164,6 +167,7 @@ function ActivityRowContent({
 	trailing,
 	trailingWidth = "compact",
 	state = "neutral",
+	pulse = false,
 	geometry,
 }: ActivityRowContentProps) {
 	return (
@@ -180,7 +184,11 @@ function ActivityRowContent({
 			<span className="min-w-0 flex-1">
 				<span className="flex items-center gap-2">
 					<span
-						className={cn("size-1.5 shrink-0 rounded-full", STATE_DOT[state])}
+						className={cn(
+							"size-1.5 shrink-0 rounded-full",
+							STATE_DOT[state],
+							pulse && "motion-safe:animate-pulse",
+						)}
 						aria-hidden
 					/>
 					<span className={cn("truncate font-medium text-ink", geometry.title)}>
@@ -215,6 +223,7 @@ export function ActivityRow({
 	trailing,
 	trailingWidth = "compact",
 	state = "neutral",
+	pulse = false,
 	size = "md",
 	onActivate,
 	actionProps,
@@ -232,6 +241,7 @@ export function ActivityRow({
 			trailing={trailing}
 			trailingWidth={trailingWidth}
 			state={state}
+			pulse={pulse}
 			geometry={geometry}
 		/>
 	);
