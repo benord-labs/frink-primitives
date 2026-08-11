@@ -88,6 +88,38 @@ describe("ActivityRow", () => {
 		assert.ok(!html.includes("bg-muted"));
 	});
 
+	test("keeps a running status static by default", () => {
+		const html = renderToStaticMarkup(
+			<ActivityRow
+				leading={<span>G</span>}
+				title="Running without motion"
+				state="running"
+			/>,
+		);
+
+		assert.ok(html.includes("bg-online"));
+		assert.ok(!html.includes("motion-safe:animate-pulse"));
+		assert.ok(!html.includes('pulse="'));
+	});
+
+	test("pulses only the hidden status dot while retaining textual status", () => {
+		const html = renderToStaticMarkup(
+			<ActivityRow
+				leading={<span>G</span>}
+				title="Running with motion"
+				state="running"
+				pulse
+			/>,
+		);
+
+		assert.match(
+			html,
+			/<span class="size-1\.5 shrink-0 rounded-full bg-online motion-safe:animate-pulse" aria-hidden="true"><\/span>/,
+		);
+		assert.equal(html.match(/motion-safe:animate-pulse/g)?.length, 1);
+		assert.ok(html.includes("Status: Running"));
+	});
+
 	test("renders a keyboard-native button only when activation is provided", () => {
 		const interactive = renderToStaticMarkup(
 			<ActivityRow
