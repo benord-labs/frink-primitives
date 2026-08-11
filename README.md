@@ -80,6 +80,7 @@ their domain data and activation behavior:
 <ul>
   <ActivityRow
     state="running"
+    pulse
     leading={<Github aria-hidden />}
     title="Fix flaky auth test"
     description="From CI · login session expiry"
@@ -89,6 +90,11 @@ their domain data and activation behavior:
   />
 </ul>
 ```
+
+`pulse` is an opt-in visual modifier for live activity. It does not change the
+semantic `state`, stays static by default, and uses `motion-safe:animate-pulse`
+so reduced-motion users keep the same status dot and textual status without
+animation.
 
 `Progress` has three modes, in precedence order — `segments` → `indeterminate` → `value`:
 
