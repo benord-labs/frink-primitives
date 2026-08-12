@@ -6,8 +6,8 @@ the marketing site and (later) the internal app.
 ## What's inside
 
 - **`src/`** — React primitives: `ActivityRow`, `Alert`, `Badge`, `Button`
-  (+`buttonVariants`), `Card` (+sub-parts), `Checkbox`, `FormMessage`, `Input`, `Label`, `Progress`
-  (+`progressVariants`), `Radio`/`RadioGroup`, `Select`, `Separator`, `Switch`, `Tabs`,
+  (+`buttonVariants`), `Card` (+sub-parts), `Checkbox`, `DropdownMenu`, `FormMessage`, `Input`, `Label`,
+  `Progress` (+`progressVariants`), `Radio`/`RadioGroup`, `Select`, `Separator`, `Switch`, `Tabs`,
   `Textarea`, `Tile` (+`DiagonalCutDefs`), `TileSurface`, `Tooltip`, and the `cn` class
   joiner.
 - **`styles/`** — `theme.css` (design tokens + `@theme inline`), `components.css`
@@ -95,6 +95,21 @@ their domain data and activation behavior:
 semantic `state`, stays static by default, and uses `motion-safe:animate-pulse`
 so reduced-motion users keep the same status dot and textual status without
 animation.
+
+`DropdownMenu` owns the accessible command-menu behavior and surface styling.
+Icon-only triggers still need a caller-supplied accessible name:
+
+```tsx
+<DropdownMenu>
+  <DropdownMenuTrigger asChild>
+    <Button size="icon" aria-label="More actions">…</Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="end">
+    <DropdownMenuItem onSelect={openTask}>Open task</DropdownMenuItem>
+    <DropdownMenuItem tone="danger" onSelect={deleteTask}>Delete task</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
 
 `Progress` has three modes, in precedence order — `segments` → `indeterminate` → `value`:
 

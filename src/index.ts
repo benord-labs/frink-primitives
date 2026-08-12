@@ -27,6 +27,19 @@ export {
 export type { CheckboxProps } from "./Checkbox";
 export { Checkbox } from "./Checkbox";
 export { cn } from "./cn";
+export type {
+	DropdownMenuContentProps,
+	DropdownMenuItemProps,
+	DropdownMenuItemTone,
+	DropdownMenuSeparatorProps,
+} from "./DropdownMenu";
+export {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "./DropdownMenu";
 export type { FormMessageProps, FormMessageVariant } from "./FormMessage";
 export { FormMessage } from "./FormMessage";
 export type { InputProps, InputSize } from "./Input";
