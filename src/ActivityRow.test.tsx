@@ -139,6 +139,50 @@ describe("ActivityRow", () => {
 		assert.ok(!passive.includes("<button"));
 	});
 
+	test("keeps independent actions outside the row activation button", () => {
+		const html = renderToStaticMarkup(
+			<ActivityRow
+				leading={<span>G</span>}
+				title="Open task"
+				onActivate={() => undefined}
+				actions={<Button size="xs">More actions</Button>}
+			/>,
+		);
+		const rowButtonStart = html.indexOf("<button");
+		const rowButtonEnd = html.indexOf("</button>", rowButtonStart);
+		const actionButtonStart = html.indexOf("<button", rowButtonStart + 1);
+
+		assert.equal(html.match(/<button/g)?.length, 2);
+		assert.ok(rowButtonStart >= 0);
+		assert.ok(rowButtonEnd < actionButtonStart);
+		assert.ok(
+			html.includes("activity-row-actions flex shrink-0 items-center gap-1"),
+		);
+		assert.ok(html.indexOf("activity-row-actions") < html.lastIndexOf("</li>"));
+	});
+
+	test("preserves the existing row DOM when no actions are provided", () => {
+		const withoutActions = renderToStaticMarkup(
+			<ActivityRow
+				leading={<span>G</span>}
+				title="Open task"
+				onActivate={() => undefined}
+			/>,
+		);
+		const emptyActions = renderToStaticMarkup(
+			<ActivityRow
+				leading={<span>G</span>}
+				title="Open task"
+				onActivate={() => undefined}
+				actions={null}
+			/>,
+		);
+
+		assert.equal(emptyActions, withoutActions);
+		assert.ok(!withoutActions.includes("activity-row-actions"));
+		assert.ok(!withoutActions.includes("flex items-center gap-1"));
+	});
+
 	test("size presets own compact and desktop geometry", () => {
 		const compact = renderToStaticMarkup(
 			<ActivityRow leading={<span>G</span>} title="Compact" size="sm" />,

@@ -66,6 +66,8 @@ export interface ActivityRowProps
 	meta?: ReactNode;
 	/** Final compact value, usually elapsed time. */
 	trailing?: ReactNode;
+	/** Independent controls rendered beside, never inside, the row activation target. */
+	actions?: ReactNode;
 	/** Width preset for the final rail. `wide` aligns lists that mix values and controls. */
 	trailingWidth?: ActivityRowTrailingWidth;
 	/** Semantic state that drives the status dot and screen-reader copy. */
@@ -221,6 +223,7 @@ export function ActivityRow({
 	description,
 	meta,
 	trailing,
+	actions,
 	trailingWidth = "compact",
 	state = "neutral",
 	pulse = false,
@@ -253,7 +256,11 @@ export function ActivityRow({
 
 	return (
 		<li
-			className={cn("border-t border-hairline first:border-t-0", className)}
+			className={cn(
+				"border-t border-hairline first:border-t-0",
+				actions != null && "flex items-center gap-1",
+				className,
+			)}
 			data-state={state}
 			data-size={size}
 			{...props}
@@ -272,6 +279,11 @@ export function ActivityRow({
 				</button>
 			) : (
 				<div className={contentClasses}>{content}</div>
+			)}
+			{actions != null && (
+				<div className="activity-row-actions flex shrink-0 items-center gap-1">
+					{actions}
+				</div>
 			)}
 		</li>
 	);
