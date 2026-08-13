@@ -72,6 +72,8 @@ export interface ActivityRowProps
 	trailingWidth?: ActivityRowTrailingWidth;
 	/** Semantic state that drives the status dot and screen-reader copy. */
 	state?: ActivityRowState;
+	/** Domain-specific screen-reader copy when the visual state is intentionally broader. */
+	statusLabel?: string;
 	/** Pulses the status dot for live activity without changing semantic state. */
 	pulse?: boolean;
 	/** Density preset. `md` matches Frink's desktop activity list. */
@@ -94,6 +96,7 @@ type ActivityRowContentProps = Pick<
 	| "meta"
 	| "pulse"
 	| "state"
+	| "statusLabel"
 	| "title"
 	| "trailing"
 	| "trailingWidth"
@@ -169,6 +172,7 @@ function ActivityRowContent({
 	trailing,
 	trailingWidth = "compact",
 	state = "neutral",
+	statusLabel,
 	pulse = false,
 	geometry,
 }: ActivityRowContentProps) {
@@ -196,7 +200,9 @@ function ActivityRowContent({
 					<span className={cn("truncate font-medium text-ink", geometry.title)}>
 						{title}
 					</span>
-					<span className="sr-only">Status: {STATE_LABEL[state]}</span>
+					<span className="sr-only">
+						Status: {statusLabel ?? STATE_LABEL[state]}
+					</span>
 				</span>
 				<ActivityRowDescription
 					description={description}
@@ -226,6 +232,7 @@ export function ActivityRow({
 	actions,
 	trailingWidth = "compact",
 	state = "neutral",
+	statusLabel,
 	pulse = false,
 	size = "md",
 	onActivate,
@@ -244,6 +251,7 @@ export function ActivityRow({
 			trailing={trailing}
 			trailingWidth={trailingWidth}
 			state={state}
+			statusLabel={statusLabel}
 			pulse={pulse}
 			geometry={geometry}
 		/>

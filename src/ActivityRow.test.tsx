@@ -88,6 +88,21 @@ describe("ActivityRow", () => {
 		assert.ok(!html.includes("bg-muted"));
 	});
 
+	test("accepts domain-specific screen-reader status copy without changing visual state", () => {
+		const html = renderToStaticMarkup(
+			<ActivityRow
+				leading={<span>G</span>}
+				title="Stopped task"
+				state="neutral"
+				statusLabel="Cancelled"
+			/>,
+		);
+
+		assert.ok(html.includes('data-state="neutral"'));
+		assert.ok(html.includes("Status: Cancelled"));
+		assert.ok(!html.includes("Status: Neutral"));
+	});
+
 	test("keeps a running status static by default", () => {
 		const html = renderToStaticMarkup(
 			<ActivityRow
