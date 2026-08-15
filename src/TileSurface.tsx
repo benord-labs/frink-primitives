@@ -35,14 +35,14 @@ export function TileSurface({
 			)}
 			{...props}
 		>
+			{corner != null && (
+				<div className="absolute top-1 right-1 z-20 font-mono text-xs text-muted-fg">
+					{corner}
+				</div>
+			)}
 			<div className="relative overflow-hidden rounded-[14px]">
 				{/* panel = pen Tile media tone: field (#0d0d0d) -> surface -> bg, a touch lighter than the frame */}
 				<div className="tile-notch absolute inset-0 bg-linear-to-br from-raised to-surface" />
-				{corner != null && (
-					<div className="absolute top-2 right-2 z-10 font-mono text-xs text-muted-fg">
-						{corner}
-					</div>
-				)}
 				<div
 					className={cn(
 						"relative z-10 flex flex-col gap-6 px-6 pt-12 pb-6",
