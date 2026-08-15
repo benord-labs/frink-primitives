@@ -39,7 +39,7 @@ export function TileSurface({
 				{/* panel = pen Tile media tone: field (#0d0d0d) -> surface -> bg, a touch lighter than the frame */}
 				<div className="tile-notch absolute inset-0 bg-linear-to-br from-raised to-surface" />
 				{corner != null && (
-					<div className="absolute top-3 right-4 z-10 font-mono text-xs text-muted-fg">
+					<div className="absolute top-2 right-2 z-10 font-mono text-xs text-muted-fg">
 						{corner}
 					</div>
 				)}
