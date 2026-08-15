@@ -36,7 +36,7 @@ export function TileSurface({
 			{...props}
 		>
 			{corner != null && (
-				<div className="absolute top-1 right-1 z-20 font-mono text-xs text-muted-fg">
+				<div className="absolute top-3 right-3 z-20 font-mono text-xs text-muted-fg">
 					{corner}
 				</div>
 			)}
