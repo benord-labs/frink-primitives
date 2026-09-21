@@ -1,7 +1,9 @@
-name: Publish to GitHub Packages
+name: Publish to npm
 
-# Publishes @benord-labs/frink-primitives whenever a vX.Y.Z tag is pushed.
-# Uses the Actions-provided GITHUB_TOKEN (packages:write for this org) — no PAT to manage.
+# Publishes @benord-labs/frink-primitives to registry.npmjs.org whenever a vX.Y.Z tag is pushed.
+# Needs the NPM_TOKEN repository secret: an npm "Automation" granular access token with
+# read/write on this package (npmjs.com → Access Tokens). GitHub Packages is no longer used:
+# it requires a token even for public packages, which a public clone of frink cannot have.
 on:
   push:
     tags:
@@ -12,14 +14,14 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          registry-url: https://npm.pkg.github.com
+          registry-url: https://registry.npmjs.org
       # Raw-source package (no build) — publish the files declared in package.json "files".
-      - run: npm publish
+      - run: npm publish --provenance --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

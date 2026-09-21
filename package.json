@@ -3,13 +3,14 @@
 	"version": "0.10.8",
 	"description": "Frink shared UI primitives + design tokens (Tailwind v4).",
 	"type": "module",
-	"license": "UNLICENSED",
+	"license": "Apache-2.0",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/benord-labs/frink-primitives.git"
 	},
 	"publishConfig": {
-		"registry": "https://npm.pkg.github.com"
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
 	},
 	"sideEffects": [
 		"*.css"
@@ -18,7 +19,7 @@
 		"src",
 		"styles",
 		"eslint-rules",
-		"designs"
+		"LICENSE"
 	],
 	"exports": {
 		".": {
