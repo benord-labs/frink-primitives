@@ -67,7 +67,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.0",
 		"@happy-dom/global-registrator": "^20.11.2",
-		"@norvalbv/devkit": "git+https://github.com/norvalbv/devkit.git#v0.51.0",
+		"@norvalbv/devkit": "git+https://github.com/norvalbv/devkit.git#v0.76.0",
 		"@testing-library/react": "^16.3.2",
 		"@testing-library/user-event": "^14.6.4",
 		"@types/node": "^26.2.0",
